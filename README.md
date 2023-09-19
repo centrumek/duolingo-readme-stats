@@ -2,9 +2,9 @@
 
 Automatically add and keep up to date your latest stats from [duolingo.com](https://www.duolingo.com/).
 
-|   Username   | Streak | Total XP |
-|:------------:|:------:|:--------:|
-| 👤 Centrumek | 🔥 257 | ⚡ 23871  |
+|   Username   | Day Streak | Total XP |
+|:------------:|:----------:|:--------:|
+| 👤 Centrumek |   🔥 257   | ⚡ 23871  |
 
 |    Language    | Level |   XP    |
 |:--------------:|:-----:|:-------:|
@@ -36,12 +36,20 @@ jobs:
   update-readme:
     name: Update readme with your duolingo stats
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
       - uses: centrumek/duolingo-readme-stats@main
         with:
-          USER_ID: <Your duolingo.com user ID>
+          DUOLINGO_USER_ID: <Your duolingo.com user ID>
 ```
+
+`DUOLINGO_USER_ID` variable can be found in browser DevTools [Fn + F12]
+
+- `Application` > `Local Storage` > `https://www.duolingo.com/` >
+  e.g. `duo.appLogo` > `{"730772122":{"canShowLogoDot":true}}`.
+- `Network` > `Fetch/XHR` > e.g. `https://zombie.duolingo.com/22/web.json?user=730772122`.
 
 ## Configuration
 

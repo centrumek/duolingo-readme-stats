@@ -217,7 +217,7 @@ const exec = (cmd, args = []) => new Promise((resolve, reject) => {
 });
 const formatOverviewTable = (username, streak, totalXp) => {
     var _a, _b, _c;
-    const tableHeader = `| Username | Streak | Total XP |`;
+    const tableHeader = `| Username | Day Streak | Total XP |`;
     const tableSeparator = '|' + Array.from({ length: 3 }, () => ':---:|').join('');
     const data = [
         (_a = '👤 ' + username) !== null && _a !== void 0 ? _a : 'N/A',
