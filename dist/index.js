@@ -102,7 +102,7 @@ const api_1 = __nccwpck_require__(947);
 const fs = __importStar(__nccwpck_require__(147));
 const util_1 = __nccwpck_require__(24);
 // Public parameters
-exports.FILE_NAME = 'DEMO_README.md';
+exports.FILE_NAME = 'README-DEMO.md';
 (() => __awaiter(void 0, void 0, void 0, function* () {
     const content = [];
     const userDetails = yield (0, api_1.getUserDetails)('730772122');

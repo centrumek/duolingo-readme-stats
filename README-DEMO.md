@@ -1,18 +1,8 @@
-### <img src="./assets/duolingo.png" alt="lplp" width="15" height="15"> Duolingo.com
+# This is a demo
 
-<div align="center">
+This file can be your README.md that gets automatically updated.
 
-|   Username   | Streak | Total XP |
-|:------------:|:------:|----------|
-| 👤 centrumek | 🔥 256 | ⚡ 26786  |
-
-| Language | Level |  XP  |
-|:--------:|-------|:----:|
-| Spanish  | 👑 20 | ⚡ 20 |
-
-</div>
-
-## TEST
+The content genrated by the action starts here:
 
 <!--START_SECTION:duolingoStats-->
 <!-- Automatically generated with https://github.com/centrumek/duolingo-readme-stats-->
@@ -28,3 +18,5 @@
 | 🇪🇸 Spanish | 👑 76 | ⚡ 10126 |
 
 <!--END_SECTION:duolingoStats-->
+
+Existing content is kept, both before and after the generated content :)

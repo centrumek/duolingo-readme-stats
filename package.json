@@ -5,6 +5,7 @@
   "scripts": {
     "build": "tsc",
     "start": "npm run build && node lib/main.js",
+    "debug": "npm run build && node --env-file .env lib/main.js",
     "package": "ncc build lib/main.js --source-map --license licenses.txt"
   },
   "repository": {
@@ -21,14 +22,12 @@
   "author": "Paul Potaczala",
   "license": "MIT",
   "dependencies": {
-    "language-flag-colors": "2.3.0",
-    "node-fetch": "^3.3.2",
-    "dotenv": "^16.3.1"
+    "@actions/core": "1.10.1",
+    "language-flag-colors": "2.3.0"
   },
   "devDependencies": {
-    "@types/node": "^16.7.12",
+    "@types/node": "^20.6.2",
     "ts-node": "^10.2.1",
-    "@types/node-fetch": "^2.5.15",
     "prettier": "2.5.1",
     "typescript": "^4.4.4",
     "@vercel/ncc": "0.38.0"

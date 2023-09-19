@@ -1,20 +1,19 @@
-import http from 'https';
+
 import {getUserDetails} from "./api";
 import * as fs from "fs";
 import {END_TOKEN, formatLanguagesTable, formatOverviewTable, INFO_LINE, START_TOKEN} from "./util";
 import {UserDetailsResponse} from "./types";
+import {getInput} from "@actions/core";
 
 // Public parameters
-export const FILE_NAME = 'DEMO_README.md';
-
-
+export const USER_ID = getInput('USER_ID')?.toLowerCase();
+export const FILE_NAME = getInput('FILE_NAME')?.toLowerCase();
 
 (async () => {
 
-
     const content: string[] = [];
 
-    const userDetails: UserDetailsResponse = await getUserDetails('730772122');
+    const userDetails: UserDetailsResponse = await getUserDetails(USER_ID);
     content.push(formatOverviewTable(userDetails.username, userDetails.streak, userDetails.totalXp));
     content.push(formatLanguagesTable(userDetails.courses));
 
