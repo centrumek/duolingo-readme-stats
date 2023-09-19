@@ -7,7 +7,7 @@ The content genrated by the action starts here:
 <!--START_SECTION:duolingoStats-->
 <!-- Automatically generated with https://github.com/centrumek/duolingo-readme-stats-->
 
-| Username | Streak | Total XP |
+| Username | Day Streak | Total XP |
 |:---:|:---:|:---:|
 | 👤 Centrumek | 🔥 257 | ⚡ 23871 |
 
