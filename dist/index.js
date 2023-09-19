@@ -100,7 +100,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.USER_ID = exports.SHOW_LANGUAGES = exports.IS_DEBUG = exports.COMMIT_EMAIL = exports.COMMIT_USERNAME = exports.COMMIT_MSG = exports.FILE_NAME = void 0;
+exports.DUOLINGO_USER_ID = exports.SHOW_LANGUAGES = exports.IS_DEBUG = exports.COMMIT_EMAIL = exports.COMMIT_USERNAME = exports.COMMIT_MSG = exports.FILE_NAME = void 0;
 const api_1 = __nccwpck_require__(8947);
 const fs = __importStar(__nccwpck_require__(7147));
 const util_1 = __nccwpck_require__(4024);
@@ -112,11 +112,11 @@ exports.COMMIT_USERNAME = (0, core_1.getInput)('COMMIT_MSG');
 exports.COMMIT_EMAIL = (0, core_1.getInput)('COMMIT_MSG');
 exports.IS_DEBUG = (0, core_1.getInput)('IS_DEBUG') === 'true';
 exports.SHOW_LANGUAGES = (0, core_1.getInput)('SHOW_LANGUAGES') === 'true';
-exports.USER_ID = (_a = (0, core_1.getInput)('USER_ID')) === null || _a === void 0 ? void 0 : _a.toLowerCase();
+exports.DUOLINGO_USER_ID = (_a = (0, core_1.getInput)('DUOLINGO_USER_ID')) === null || _a === void 0 ? void 0 : _a.toLowerCase();
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        if (!exports.USER_ID) {
-            throw new Error('User ID not provided!');
+        if (!exports.DUOLINGO_USER_ID) {
+            throw new Error('Duolingo user ID not provided!');
         }
         const content = yield buildContent();
         updateFile(content);
@@ -135,7 +135,7 @@ exports.USER_ID = (_a = (0, core_1.getInput)('USER_ID')) === null || _a === void
 function buildContent() {
     return __awaiter(this, void 0, void 0, function* () {
         const content = [];
-        const userDetails = yield (0, api_1.getUserDetails)(exports.USER_ID);
+        const userDetails = yield (0, api_1.getUserDetails)(exports.DUOLINGO_USER_ID);
         content.push((0, util_1.formatOverviewTable)(userDetails.username, userDetails.streak, userDetails.totalXp));
         if (exports.SHOW_LANGUAGES) {
             if (userDetails.courses.length === 0) {
