@@ -98,7 +98,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var _a, _b;
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FILE_NAME = exports.USER_ID = void 0;
 const api_1 = __nccwpck_require__(8947);
@@ -107,12 +107,18 @@ const util_1 = __nccwpck_require__(4024);
 const core_1 = __nccwpck_require__(2186);
 // Public parameters
 exports.USER_ID = (_a = (0, core_1.getInput)('USER_ID')) === null || _a === void 0 ? void 0 : _a.toLowerCase();
-exports.FILE_NAME = (_b = (0, core_1.getInput)('FILE_NAME')) === null || _b === void 0 ? void 0 : _b.toLowerCase();
+exports.FILE_NAME = (0, core_1.getInput)('FILE_NAME');
 (() => __awaiter(void 0, void 0, void 0, function* () {
     const content = [];
     const userDetails = yield (0, api_1.getUserDetails)(exports.USER_ID);
     content.push((0, util_1.formatOverviewTable)(userDetails.username, userDetails.streak, userDetails.totalXp));
     content.push((0, util_1.formatLanguagesTable)(userDetails.courses));
+    // Test
+    fs.readdir('./', (err, files) => {
+        files.forEach(file => {
+            console.log(file);
+        });
+    });
     const readmeContent = fs.readFileSync('./' + exports.FILE_NAME, 'utf-8');
     const startIndex = readmeContent.indexOf(util_1.START_TOKEN);
     if (startIndex === -1) {

@@ -17,6 +17,13 @@ export const FILE_NAME = getInput('FILE_NAME');
     content.push(formatOverviewTable(userDetails.username, userDetails.streak, userDetails.totalXp));
     content.push(formatLanguagesTable(userDetails.courses));
 
+    // Test
+    fs.readdir('./', (err, files) => {
+        files.forEach(file => {
+            console.log(file);
+        });
+    });
+
     const readmeContent = fs.readFileSync('./' + FILE_NAME, 'utf-8')
 
     const startIndex = readmeContent.indexOf(START_TOKEN);

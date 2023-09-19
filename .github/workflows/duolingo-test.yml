@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - run: |
+          ls -al
       - uses: ./
         with:
           USER_ID: '730772122'
