@@ -25,7 +25,7 @@ Add these two placeholders somewhere in your `README.md`, they will get replaced
 Create a GitHub Action in your repository, you can call it `duolingo-readme-stats.yml`.
 
 ```yaml
-name: Chess Games & Stats Action
+name: Duolingo README Stats Action
 
 on:
   schedule:
