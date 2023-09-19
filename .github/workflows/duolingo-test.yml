@@ -12,9 +12,11 @@ jobs:
   update-readme:
     name: Update readme with your duolingo stats
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
       - uses: ./
         with:
-          USER_ID: '730772122'
+          DUOLINGO_USER_ID: '730772122'
           FILE_NAME: 'README-DEMO.md'
