@@ -100,25 +100,53 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.FILE_NAME = exports.USER_ID = void 0;
+exports.USER_ID = exports.SHOW_LANGUAGES = exports.IS_DEBUG = exports.COMMIT_EMAIL = exports.COMMIT_USERNAME = exports.COMMIT_MSG = exports.FILE_NAME = void 0;
 const api_1 = __nccwpck_require__(8947);
 const fs = __importStar(__nccwpck_require__(7147));
 const util_1 = __nccwpck_require__(4024);
 const core_1 = __nccwpck_require__(2186);
 // Public parameters
-exports.USER_ID = (_a = (0, core_1.getInput)('USER_ID')) === null || _a === void 0 ? void 0 : _a.toLowerCase();
 exports.FILE_NAME = (0, core_1.getInput)('FILE_NAME');
+exports.COMMIT_MSG = (0, core_1.getInput)('COMMIT_MSG');
+exports.COMMIT_USERNAME = (0, core_1.getInput)('COMMIT_MSG');
+exports.COMMIT_EMAIL = (0, core_1.getInput)('COMMIT_MSG');
+exports.IS_DEBUG = (0, core_1.getInput)('IS_DEBUG') === 'true';
+exports.SHOW_LANGUAGES = (0, core_1.getInput)('SHOW_LANGUAGES') === 'true';
+exports.USER_ID = (_a = (0, core_1.getInput)('USER_ID')) === null || _a === void 0 ? void 0 : _a.toLowerCase();
 (() => __awaiter(void 0, void 0, void 0, function* () {
-    const content = [];
-    const userDetails = yield (0, api_1.getUserDetails)(exports.USER_ID);
-    content.push((0, util_1.formatOverviewTable)(userDetails.username, userDetails.streak, userDetails.totalXp));
-    content.push((0, util_1.formatLanguagesTable)(userDetails.courses));
-    // Test
-    fs.readdir('./', (err, files) => {
-        files.forEach(file => {
-            console.log(file);
-        });
+    try {
+        if (!exports.USER_ID) {
+            throw new Error('User ID not provided!');
+        }
+        const content = yield buildContent();
+        updateFile(content);
+        if (!exports.IS_DEBUG) {
+            yield (0, util_1.commitFile)(exports.FILE_NAME, exports.COMMIT_MSG, exports.COMMIT_USERNAME, exports.COMMIT_EMAIL);
+        }
+        console.log('Successfully updated the README file!');
+    }
+    catch (error) {
+        const errorMessage = error instanceof Error
+            ? error.message
+            : 'The action failed with an Unknown error';
+        (0, util_1.setFailure)(errorMessage);
+    }
+}))();
+function buildContent() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const content = [];
+        const userDetails = yield (0, api_1.getUserDetails)(exports.USER_ID);
+        content.push((0, util_1.formatOverviewTable)(userDetails.username, userDetails.streak, userDetails.totalXp));
+        if (exports.SHOW_LANGUAGES) {
+            if (userDetails.courses.length === 0) {
+                throw new Error('No languages found!');
+            }
+            content.push((0, util_1.formatLanguagesTable)(userDetails.courses));
+        }
+        return content;
     });
+}
+function updateFile(content) {
     const readmeContent = fs.readFileSync('./' + exports.FILE_NAME, 'utf-8');
     const startIndex = readmeContent.indexOf(util_1.START_TOKEN);
     if (startIndex === -1) {
@@ -132,22 +160,61 @@ exports.FILE_NAME = (0, core_1.getInput)('FILE_NAME');
     const readmeSafeParts = readmeContent.split(oldPart);
     const newReadme = `${readmeSafeParts[0]}${util_1.START_TOKEN}\n${util_1.INFO_LINE}\n${content.join('\n')}\n${readmeSafeParts[1]}`;
     fs.writeFileSync('./' + exports.FILE_NAME, newReadme);
-}))();
+}
 
 
 /***/ }),
 
 /***/ 4024:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.formatLanguagesTable = exports.formatOverviewTable = exports.INFO_LINE = exports.END_TOKEN = exports.START_TOKEN = void 0;
+exports.setFailure = exports.formatLanguagesTable = exports.formatOverviewTable = exports.commitFile = exports.INFO_LINE = exports.END_TOKEN = exports.START_TOKEN = void 0;
 const language_flag_colors_1 = __nccwpck_require__(1661);
+const node_child_process_1 = __nccwpck_require__(7718);
+const core_1 = __nccwpck_require__(2186);
 exports.START_TOKEN = '<!--START_SECTION:duolingoStats-->';
 exports.END_TOKEN = '<!--END_SECTION:duolingoStats-->';
 exports.INFO_LINE = '<!-- Automatically generated with https://github.com/centrumek/duolingo-readme-stats-->\n';
+const commitFile = (filename, message, username, email) => __awaiter(void 0, void 0, void 0, function* () {
+    yield exec('git', [
+        'config',
+        '--global',
+        'user.email',
+        email
+    ]);
+    yield exec('git', ['config', '--global', 'user.name', username]);
+    yield exec('git', ['add', filename]);
+    yield exec('git', ['commit', '-m', message]);
+    yield exec('git', ['push']);
+});
+exports.commitFile = commitFile;
+const exec = (cmd, args = []) => new Promise((resolve, reject) => {
+    const childProcess = (0, node_child_process_1.spawn)(cmd, args, { stdio: 'pipe' });
+    let stdout = '';
+    childProcess.stdout.on('data', data => {
+        stdout = data;
+    });
+    childProcess.on('close', code => {
+        if (code !== 0 && !stdout.includes('nothing to commit')) {
+            const err = new Error(`[CHILD PROCESS] Invalid status code: ${code}`);
+            return reject(err);
+        }
+        return resolve(code);
+    });
+    childProcess.on('error', reject);
+});
 const formatOverviewTable = (username, streak, totalXp) => {
     var _a, _b, _c;
     const tableHeader = `| Username | Streak | Total XP |`;
@@ -166,7 +233,7 @@ const formatLanguagesTable = (courses) => {
     const tableSeparator = '|' + Array.from({ length: 3 }, () => ':---:|').join('');
     const rows = courses.map(course => {
         const data = [
-            getFlagEmoji(course.title) + ' ' + course.title,
+            (0, language_flag_colors_1.getEmoji)(course.title) + ' ' + course.title,
             '👑 ' + course.crowns,
             '⚡ ' + course.xp
         ];
@@ -175,10 +242,11 @@ const formatLanguagesTable = (courses) => {
     return `${tableHeader}\n${tableSeparator}\n${rows}\n`;
 };
 exports.formatLanguagesTable = formatLanguagesTable;
-const getFlagEmoji = (langCode) => {
-    var _a;
-    return (_a = (0, language_flag_colors_1.getEmoji)(langCode)) !== null && _a !== void 0 ? _a : "";
+const setFailure = (error) => {
+    console.error(error);
+    (0, core_1.setFailed)(error);
 };
+exports.setFailure = setFailure;
 
 
 /***/ }),
@@ -2957,6 +3025,14 @@ module.exports = require("https");
 
 "use strict";
 module.exports = require("net");
+
+/***/ }),
+
+/***/ 7718:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:child_process");
 
 /***/ }),
 
