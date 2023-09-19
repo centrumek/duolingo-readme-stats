@@ -220,9 +220,9 @@ const formatOverviewTable = (username, streak, totalXp) => {
     const tableHeader = `| Username | Streak | Total XP |`;
     const tableSeparator = '|' + Array.from({ length: 3 }, () => ':---:|').join('');
     const data = [
-        (_a = '👤 ' + username) !== null && _a !== void 0 ? _a : 'No Username',
-        (_b = '🔥 ' + streak) !== null && _b !== void 0 ? _b : 'No Streak',
-        (_c = '⚡ ' + totalXp) !== null && _c !== void 0 ? _c : 'No Xp'
+        (_a = '👤 ' + username) !== null && _a !== void 0 ? _a : 'N/A',
+        (_b = '🔥 ' + streak) !== null && _b !== void 0 ? _b : 'N/A',
+        (_c = '⚡ ' + totalXp) !== null && _c !== void 0 ? _c : 'N/A'
     ];
     const row = `| ${data.join(' | ')} |`;
     return `${tableHeader}\n${tableSeparator}\n${row}\n`;

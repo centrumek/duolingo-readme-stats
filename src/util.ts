@@ -42,9 +42,9 @@ export const formatOverviewTable = (username: string, streak: number, totalXp: n
     const tableSeparator =
         '|' + Array.from({length: 3}, () => ':---:|').join('');
     const data = [
-        '👤 ' + username ?? 'No Username',
-        '🔥 ' + streak ?? 'No Streak',
-        '⚡ ' + totalXp ?? 'No Xp'
+        '👤 ' + username ?? 'N/A',
+        '🔥 ' + streak ?? 'N/A',
+        '⚡ ' + totalXp ?? 'N/A'
     ];
 
     const row = `| ${data.join(' | ')} |`;

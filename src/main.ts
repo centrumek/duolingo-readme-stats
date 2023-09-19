@@ -19,12 +19,12 @@ export const COMMIT_USERNAME = getInput('COMMIT_MSG');
 export const COMMIT_EMAIL = getInput('COMMIT_MSG');
 export const IS_DEBUG = getInput('IS_DEBUG') === 'true';
 export const SHOW_LANGUAGES = getInput('SHOW_LANGUAGES') === 'true';
-export const USER_ID = getInput('USER_ID')?.toLowerCase();
+export const DUOLINGO_USER_ID = getInput('DUOLINGO_USER_ID')?.toLowerCase();
 
 (async () => {
     try {
-        if (!USER_ID) {
-            throw new Error('User ID not provided!');
+        if (!DUOLINGO_USER_ID) {
+            throw new Error('Duolingo user ID not provided!');
         }
         const content = await buildContent();
         updateFile(content);
@@ -43,7 +43,7 @@ export const USER_ID = getInput('USER_ID')?.toLowerCase();
 async function buildContent() {
     const content: string[] = [];
 
-    const userDetails: UserDetailsResponse = await getUserDetails(USER_ID);
+    const userDetails: UserDetailsResponse = await getUserDetails(DUOLINGO_USER_ID);
     content.push(formatOverviewTable(userDetails.username, userDetails.streak, userDetails.totalXp));
 
     if (SHOW_LANGUAGES) {

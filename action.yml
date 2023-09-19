@@ -3,10 +3,14 @@ description: 'Dynamically generated duolingo.com stats for your README.md'
 author: 'Paul Potaczala'
 
 inputs:
-  USER_ID:
-    description: 'Your Duolingo.com user id'
+  DUOLINGO_USER_ID:
+    description: 'Your duolingo.com user ID'
     default: '730772122'
     required: true
+  COMMIT_EMAIL:
+    description: "Email used while committing to the repo"
+    default: "41898282+github-actions[bot]@users.noreply.github.com"
+    required: false
   COMMIT_MSG:
     description: "Commit message used while committing to the repo"
     default: "💬 Updated README with your duolingo stats"
@@ -14,10 +18,6 @@ inputs:
   COMMIT_USERNAME:
     description: "Username used while committing to the repo"
     default: "duolingo-stats-bot"
-    required: false
-  COMMIT_EMAIL:
-    description: "Email used while committing to the repo"
-    default: "41898282+github-actions[bot]@users.noreply.github.com"
     required: false
   FILE_NAME:
     description: "Define a specific file in your repo"
