@@ -1,0 +1,34 @@
+{
+  "name": "duolingo-readme-stats",
+  "version": "1.0.0",
+  "description": "Dynamically generated duolingo.com stats for your README.md",
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node lib/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/centrumek/duolingo-readme-stats"
+  },
+  "keywords": [
+    "github",
+    "actions",
+    "readme",
+    "duolingo",
+    "stats"
+  ],
+  "author": "Paul Potaczala",
+  "license": "MIT",
+  "dependencies": {
+    "language-flag-colors": "2.3.0",
+    "node-fetch": "^3.3.2",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^16.7.12",
+    "ts-node": "^10.2.1",
+    "@types/node-fetch": "^2.5.15",
+    "prettier": "2.5.1",
+    "typescript": "^4.4.4"
+  }
+}

@@ -1,0 +1,32 @@
+name: 'Duolingo.com Stats'
+description: 'Dynamically generated duolingo.com stats for your README.md'
+author: 'Paul Potaczala'
+
+inputs:
+  USER_ID:
+    description: 'Your Duolingo.com user id'
+    default: '730772122'
+    required: true
+  COMMIT_MSG:
+    description: "Commit message used while committing to the repo"
+    default: "💬 Updated README with your duolingo stats"
+    required: false
+  FILE_NAME:
+    description: "Define a specific file in your repo"
+    default: "README.md"
+    required: false
+  SHOW_OVERVIEW:
+    description: "Toggle the overview table"
+    default: "true"
+    required: false
+  SHOW_LANGUAGES:
+    description: "Toggle the languages table"
+    default: "true"
+    required: false
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
+
+branding:
+  icon: 'activity'
+  color: 'green'
