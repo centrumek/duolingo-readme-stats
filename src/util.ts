@@ -38,7 +38,7 @@ const exec = (cmd: string, args: string[] = []) =>
     });
 
 export const formatOverviewTable = (username: string, streak: number, totalXp: number): string => {
-    const tableHeader = `| Username | Streak | Total XP |`;
+    const tableHeader = `| Username | Day Streak | Total XP |`;
     const tableSeparator =
         '|' + Array.from({length: 3}, () => ':---:|').join('');
     const data = [
