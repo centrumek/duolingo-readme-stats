@@ -11,13 +11,17 @@ inputs:
     description: "Commit message used while committing to the repo"
     default: "💬 Updated README with your duolingo stats"
     required: false
+  COMMIT_USERNAME:
+    description: "Username used while committing to the repo"
+    default: "duolingo-stats-bot"
+    required: false
+  COMMIT_EMAIL:
+    description: "Email used while committing to the repo"
+    default: "41898282+github-actions[bot]@users.noreply.github.com"
+    required: false
   FILE_NAME:
     description: "Define a specific file in your repo"
     default: "README.md"
-    required: false
-  SHOW_OVERVIEW:
-    description: "Toggle the overview table"
-    default: "true"
     required: false
   SHOW_LANGUAGES:
     description: "Toggle the languages table"
