@@ -7,7 +7,7 @@ import {getInput} from "@actions/core";
 
 // Public parameters
 export const USER_ID = getInput('USER_ID')?.toLowerCase();
-export const FILE_NAME = getInput('FILE_NAME')?.toLowerCase();
+export const FILE_NAME = getInput('FILE_NAME');
 
 (async () => {
 
