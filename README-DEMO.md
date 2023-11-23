@@ -9,13 +9,13 @@ The content genrated by the action starts here:
 
 | Username | Day Streak | Total XP |
 |:---:|:---:|:---:|
-| 👤 Centrumek | 🔥 316 | ⚡ 25743 |
+| 👤 Centrumek | 🔥 317 | ⚡ 25823 |
 
 | Language | Level | XP |
 |:---:|:---:|:---:|
-| 🇪🇸 Spanish | 👑 79 | ⚡ 10476 |
+| 🇺🇦 Ukrainian | 👑 39 | ⚡ 10069 |
+| 🇪🇸 Spanish | 👑 79 | ⚡ 10498 |
 | 🇯🇵 Japanese | 👑 9 | ⚡ 5256 |
-| 🇺🇦 Ukrainian | 👑 39 | ⚡ 10011 |
 
 <!--END_SECTION:duolingoStats-->
 
