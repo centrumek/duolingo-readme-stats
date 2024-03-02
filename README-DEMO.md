@@ -9,11 +9,11 @@ The content genrated by the action starts here:
 
 | Username | Day Streak | Total XP |
 |:---:|:---:|:---:|
-| 👤 Centrumek | 🔥 399 | ⚡ 27594 |
+| 👤 Centrumek | 🔥 400 | ⚡ 27606 |
 
 | Language | Level | XP |
 |:---:|:---:|:---:|
-| 🇺🇦 Ukrainian | 👑 44 | ⚡ 11560 |
+| 🇺🇦 Ukrainian | 👑 44 | ⚡ 11572 |
 | 🇪🇸 Spanish | 👑 81 | ⚡ 10680 |
 | 🇯🇵 Japanese | 👑 9 | ⚡ 5354 |
 
