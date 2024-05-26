@@ -268,7 +268,7 @@ const formatOverviewTable = (username, streak, totalXp) => {
     const tableHeader = `| Username | Day Streak | Total XP |`;
     const tableSeparator = '|' + Array.from({ length: 3 }, () => ':---:|').join('');
     const data = [
-        (_a = '👤 ' + username) !== null && _a !== void 0 ? _a : 'N/A',
+        (_a = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/duolingo.png" height="12"> ' + username) !== null && _a !== void 0 ? _a : 'N/A',
         (_b = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/streak.svg" height="12"> ' + streak) !== null && _b !== void 0 ? _b : 'N/A',
         (_c = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXp) !== null && _c !== void 0 ? _c : 'N/A'
     ];

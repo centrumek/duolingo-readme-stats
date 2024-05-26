@@ -91,7 +91,7 @@ export const formatOverviewTable = (username: string, streak: number, totalXp: n
     const tableSeparator =
         '|' + Array.from({length: 3}, () => ':---:|').join('');
     const data = [
-        '👤 ' + username ?? 'N/A',
+        '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/duolingo.png" height="12"> ' + username ?? 'N/A',
         '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/streak.svg" height="12"> ' + streak ?? 'N/A',
         '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXp ?? 'N/A'
     ];
