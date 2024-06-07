@@ -277,6 +277,7 @@ const formatOverviewTable = (username, streak, totalXp) => {
 };
 exports.formatOverviewTable = formatOverviewTable;
 const formatLanguagesTable = (courses) => {
+    courses.sort((a, b) => b.xp - a.xp);
     const tableHeader = `| Language | XP |`;
     const tableSeparator = '|' + Array.from({ length: 2 }, () => ':---:|').join('');
     const rows = courses.map(course => {

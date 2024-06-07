@@ -102,6 +102,7 @@ export const formatOverviewTable = (username: string, streak: number, totalXp: n
 };
 
 export const formatLanguagesTable = (courses: Course[]): string => {
+	courses.sort((a, b) => b.xp - a.xp);
     const tableHeader = `| Language | XP |`;
     const tableSeparator =
         '|' + Array.from({length: 2}, () => ':---:|').join('');
