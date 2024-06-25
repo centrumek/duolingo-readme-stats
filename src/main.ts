@@ -20,6 +20,7 @@ export const COMMIT_EMAIL = getInput('COMMIT_MSG');
 export const IS_DEBUG = getInput('IS_DEBUG') === 'true';
 export const SHOW_LANGUAGES = getInput('SHOW_LANGUAGES') === 'true';
 export const DUOLINGO_USER_ID = getInput('DUOLINGO_USER_ID')?.toLowerCase();
+export const SHOW_FROM_ENGLISH = getInput('SHOW_FROM_ENGLISH') === 'true';
 
 (async () => {
     try {

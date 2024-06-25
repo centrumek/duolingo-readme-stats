@@ -7,6 +7,7 @@ export type TrackingProperties = {
 
 export type Course = {
     title: string;
+    fromLanguage: string;
     xp: number;
     crowns: number;
 }

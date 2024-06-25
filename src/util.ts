@@ -1,15 +1,45 @@
 import {Course} from "./types";
 import {spawn} from "node:child_process";
 import {setFailed} from "@actions/core";
+import { SHOW_FROM_ENGLISH } from "./main";
 
 export const START_TOKEN = '<!--START_SECTION:duolingoStats-->';
 export const END_TOKEN = '<!--END_SECTION:duolingoStats-->';
 export const INFO_LINE = '<!-- Automatically generated with https://github.com/centrumek/duolingo-readme-stats-->\n';
 
+export const langsISO: { [key: string]: string } = {
+    "en": "English",
+    "ar": "Arabic",
+    "bn": "Bangla",
+    "hi": "Hindi",
+    "te": "Telugu",
+    "zh": "Chinese",
+    "cs": "Czech",
+    "nl": "Dutch",
+    "fr": "French",
+    "de": "German",
+    "el": "Greek",
+    "hu": "Hungarian",
+    "id": "Indonesian",
+    "it": "Italian",
+    "ja": "Japanese",
+    "ko": "Korean",
+    "pl": "Polish",
+    "pt": "Portuguese",
+    "ro": "Romanian",
+    "ru": "Russian",
+    "es": "Spanish",
+    "tl": "Tagalog",
+    "tr": "Turkish",
+    "uk": "Ukrainian",
+    "vi": "Vietnamese",
+};
+
 export const courseFlags: { [key: string]: string } = {
 	"Arabic": "arabic.svg",
     "Chinese": "chinese.svg",
     "Chinese (Cantonese)": "chinese.svg",
+    "Czech": "czech.svg",
 	"Danish": "danish.svg",
 	"Dutch": "dutch.svg",
 	"English": "english.svg", 
@@ -109,7 +139,7 @@ export const formatLanguagesTable = (courses: Course[]): string => {
 
     const rows = courses.map(course => {
         const data = [
-            getEmoji(course.title) + ' ' + course.title,
+            getEmoji(course.title) + ' ' + course.title + (course.fromLanguage == "en" ? SHOW_FROM_ENGLISH ? ` (from ${getEmoji("English")} English)` : "" : ` (from ${getEmoji(langsISO[course.fromLanguage])} ${langsISO[course.fromLanguage]})`),
             '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + course.xp
         ];
         return `| ${data.join(' | ')} |`;

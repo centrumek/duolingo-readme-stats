@@ -100,7 +100,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.DUOLINGO_USER_ID = exports.SHOW_LANGUAGES = exports.IS_DEBUG = exports.COMMIT_EMAIL = exports.COMMIT_USERNAME = exports.COMMIT_MSG = exports.FILE_NAME = void 0;
+exports.SHOW_FROM_ENGLISH = exports.DUOLINGO_USER_ID = exports.SHOW_LANGUAGES = exports.IS_DEBUG = exports.COMMIT_EMAIL = exports.COMMIT_USERNAME = exports.COMMIT_MSG = exports.FILE_NAME = void 0;
 const api_1 = __nccwpck_require__(8947);
 const fs = __importStar(__nccwpck_require__(7147));
 const util_1 = __nccwpck_require__(4024);
@@ -113,6 +113,7 @@ exports.COMMIT_EMAIL = (0, core_1.getInput)('COMMIT_MSG');
 exports.IS_DEBUG = (0, core_1.getInput)('IS_DEBUG') === 'true';
 exports.SHOW_LANGUAGES = (0, core_1.getInput)('SHOW_LANGUAGES') === 'true';
 exports.DUOLINGO_USER_ID = (_a = (0, core_1.getInput)('DUOLINGO_USER_ID')) === null || _a === void 0 ? void 0 : _a.toLowerCase();
+exports.SHOW_FROM_ENGLISH = (0, core_1.getInput)('SHOW_FROM_ENGLISH') === 'true';
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!exports.DUOLINGO_USER_ID) {
@@ -180,16 +181,45 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.setFailure = exports.formatLanguagesTable = exports.formatOverviewTable = exports.commitFile = exports.getEmoji = exports.courseFlags = exports.INFO_LINE = exports.END_TOKEN = exports.START_TOKEN = void 0;
+exports.setFailure = exports.formatLanguagesTable = exports.formatOverviewTable = exports.commitFile = exports.getEmoji = exports.courseFlags = exports.langsISO = exports.INFO_LINE = exports.END_TOKEN = exports.START_TOKEN = void 0;
 const node_child_process_1 = __nccwpck_require__(7718);
 const core_1 = __nccwpck_require__(2186);
+const main_1 = __nccwpck_require__(3109);
 exports.START_TOKEN = '<!--START_SECTION:duolingoStats-->';
 exports.END_TOKEN = '<!--END_SECTION:duolingoStats-->';
 exports.INFO_LINE = '<!-- Automatically generated with https://github.com/centrumek/duolingo-readme-stats-->\n';
+exports.langsISO = {
+    "en": "English",
+    "ar": "Arabic",
+    "bn": "Bangla",
+    "hi": "Hindi",
+    "te": "Telugu",
+    "zh": "Chinese",
+    "cs": "Czech",
+    "nl": "Dutch",
+    "fr": "French",
+    "de": "German",
+    "el": "Greek",
+    "hu": "Hungarian",
+    "id": "Indonesian",
+    "it": "Italian",
+    "ja": "Japanese",
+    "ko": "Korean",
+    "pl": "Polish",
+    "pt": "Portuguese",
+    "ro": "Romanian",
+    "ru": "Russian",
+    "es": "Spanish",
+    "tl": "Tagalog",
+    "tr": "Turkish",
+    "uk": "Ukrainian",
+    "vi": "Vietnamese",
+};
 exports.courseFlags = {
     "Arabic": "arabic.svg",
     "Chinese": "chinese.svg",
     "Chinese (Cantonese)": "chinese.svg",
+    "Czech": "czech.svg",
     "Danish": "danish.svg",
     "Dutch": "dutch.svg",
     "English": "english.svg",
@@ -282,7 +312,7 @@ const formatLanguagesTable = (courses) => {
     const tableSeparator = '|' + Array.from({ length: 2 }, () => ':---:|').join('');
     const rows = courses.map(course => {
         const data = [
-            getEmoji(course.title) + ' ' + course.title,
+            getEmoji(course.title) + ' ' + course.title + (course.fromLanguage == "en" ? main_1.SHOW_FROM_ENGLISH ? ` (from ${getEmoji("English")} English)` : "" : ` (from ${getEmoji(exports.langsISO[course.fromLanguage])} ${exports.langsISO[course.fromLanguage]})`),
             '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + course.xp
         ];
         return `| ${data.join(' | ')} |`;

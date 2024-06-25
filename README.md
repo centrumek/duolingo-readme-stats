@@ -43,6 +43,7 @@ jobs:
       - uses: centrumek/duolingo-readme-stats@main
         with:
           DUOLINGO_USER_ID: <Your duolingo.com user ID>
+          SHOW_FROM_ENGLISH: <true/false>
 ```
 
 `DUOLINGO_USER_ID` variable can be found in browser DevTools [Fn + F12]
@@ -50,6 +51,8 @@ jobs:
 - `Application` > `Local Storage` > `https://www.duolingo.com/` >
   e.g. `duo.appLogo` > `{"730772122":{"canShowLogoDot":true}}`.
 - `Network` > `Fetch/XHR` > e.g. `https://zombie.duolingo.com/22/web.json?user=730772122`.
+
+`SHOW_FROM_ENGLISH` determines, whether "(from English)" should be appended to languages learnt from English, similarly to learning from other languages.
 
 ## Configuration
 
@@ -63,3 +66,4 @@ There are a few configuration options you can use in your GitHub Action.
 | COMMIT_USERNAME  |    Username used while committing to the repo    |                  duolingo-stats-bot                   |    No    |
 |    FILE_NAME     |       Define a specific file in your repo        |                       README.md                       |    No    |
 |  SHOW_LANGUAGES  |            Toggle the languages table            |                         true                          |    No    |
+| SHOW_FROM_ENGLISH| Determines, whether "(from English)" should be appended to languages learnt from English | false | No |
