@@ -21,6 +21,7 @@ export const IS_DEBUG = getInput('IS_DEBUG') === 'true';
 export const SHOW_LANGUAGES = getInput('SHOW_LANGUAGES') === 'true';
 export const DUOLINGO_USER_ID = getInput('DUOLINGO_USER_ID')?.toLowerCase();
 export const SHOW_FROM_ENGLISH = getInput('SHOW_FROM_ENGLISH') === 'true';
+export const SHOW_LEAGUE = getInput('SHOW_LEAGUE') === 'true';
 
 (async () => {
     try {
@@ -45,7 +46,9 @@ async function buildContent() {
     const content: string[] = [];
 
     const userDetails: UserDetailsResponse = await getUserDetails(DUOLINGO_USER_ID);
-    content.push(formatOverviewTable(userDetails.username, userDetails.streak, userDetails.totalXp));
+    fs.writeFileSync("test.json", JSON.stringify(userDetails, null, 4))
+    content.push(formatOverviewTable(userDetails.username, userDetails.streak, userDetails.totalXp, (SHOW_LEAGUE ? userDetails.trackingProperties.leaderboard_league : false)));
+
 
     if (SHOW_LANGUAGES) {
         if (userDetails.courses.length === 0) {

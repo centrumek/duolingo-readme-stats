@@ -31,6 +31,10 @@ inputs:
     description: "Determines, whether \" (from English)\" should be appended to languages learnt from English, similarly to learning from other languages"
     default: "false"
     required: false
+  SHOW_LEAGUE:
+    description: "Set, whether the user table should show the current league"
+    default: "true"
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'
