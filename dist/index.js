@@ -100,7 +100,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.SHOW_LEAGUE = exports.SHOW_FROM_ENGLISH = exports.DUOLINGO_USER_ID = exports.SHOW_LANGUAGES = exports.IS_DEBUG = exports.COMMIT_EMAIL = exports.COMMIT_USERNAME = exports.COMMIT_MSG = exports.FILE_NAME = void 0;
+exports.SHOW_FROM_ENGLISH = exports.DUOLINGO_USER_ID = exports.SHOW_LANGUAGES = exports.IS_DEBUG = exports.COMMIT_EMAIL = exports.COMMIT_USERNAME = exports.COMMIT_MSG = exports.FILE_NAME = void 0;
 const api_1 = __nccwpck_require__(8947);
 const fs = __importStar(__nccwpck_require__(7147));
 const util_1 = __nccwpck_require__(4024);
@@ -114,7 +114,6 @@ exports.IS_DEBUG = (0, core_1.getInput)('IS_DEBUG') === 'true';
 exports.SHOW_LANGUAGES = (0, core_1.getInput)('SHOW_LANGUAGES') === 'true';
 exports.DUOLINGO_USER_ID = (_a = (0, core_1.getInput)('DUOLINGO_USER_ID')) === null || _a === void 0 ? void 0 : _a.toLowerCase();
 exports.SHOW_FROM_ENGLISH = (0, core_1.getInput)('SHOW_FROM_ENGLISH') === 'true';
-exports.SHOW_LEAGUE = (0, core_1.getInput)('SHOW_LEAGUE') === 'true';
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!exports.DUOLINGO_USER_ID) {
@@ -138,8 +137,7 @@ function buildContent() {
     return __awaiter(this, void 0, void 0, function* () {
         const content = [];
         const userDetails = yield (0, api_1.getUserDetails)(exports.DUOLINGO_USER_ID);
-        fs.writeFileSync("test.json", JSON.stringify(userDetails, null, 4));
-        content.push((0, util_1.formatOverviewTable)(userDetails.username, userDetails.streak, userDetails.totalXp, (exports.SHOW_LEAGUE ? userDetails.trackingProperties.leaderboard_league : false)));
+        content.push((0, util_1.formatOverviewTable)(userDetails.username, userDetails.streak, userDetails.totalXp));
         if (exports.SHOW_LANGUAGES) {
             if (userDetails.courses.length === 0) {
                 throw new Error('No languages found!');
@@ -295,18 +293,15 @@ const exec = (cmd, args = []) => new Promise((resolve, reject) => {
     });
     childProcess.on('error', reject);
 });
-const formatOverviewTable = (username, streak, totalXp, league) => {
+const formatOverviewTable = (username, streak, totalXp) => {
     var _a, _b, _c;
-    const leagues = ["Bronze", "Silver", "Gold", "Sapphire", "Ruby", "Emerald", "Amethyst", "Pearl", "Obsidian", "Diamond"];
-    const tableHeader = `| Username | Day Streak | Total XP |${league === false ? '' : ' League |'}`;
-    const tableSeparator = '|' + Array.from({ length: league === false ? 3 : 4 }, () => ':---:|').join('');
-    var data = [
+    const tableHeader = `| Username | Day Streak | Total XP |`;
+    const tableSeparator = '|' + Array.from({ length: 3 }, () => ':---:|').join('');
+    const data = [
         (_a = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/duolingo.png" height="12"> ' + username) !== null && _a !== void 0 ? _a : 'N/A',
         (_b = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/streak.svg" height="12"> ' + streak) !== null && _b !== void 0 ? _b : 'N/A',
-        (_c = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXp) !== null && _c !== void 0 ? _c : 'N/A',
+        (_c = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXp) !== null && _c !== void 0 ? _c : 'N/A'
     ];
-    if (league !== false)
-        data.push(`<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/leagues/${leagues[league].toLowerCase()}.png" height="12"> ` + leagues[league]);
     const row = `| ${data.join(' | ')} |`;
     return `${tableHeader}\n${tableSeparator}\n${row}\n`;
 };

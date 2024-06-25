@@ -1,4 +1,5 @@
 export type TrackingProperties = {
+
     num_followers: number;
     num_following: number;
     leaderboard_league: number;
