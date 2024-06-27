@@ -1,5 +1,11 @@
-export type TrackingProperties = {
+export type XPGain = {
+    skillId: string|null,
+    xp: number,
+    eventType: string|null,
+    time: number
+}
 
+export type TrackingProperties = {
     num_followers: number;
     num_following: number;
     leaderboard_league: number;
@@ -21,4 +27,5 @@ export type UserDetailsResponse = {
     inviteURL: string;
     courses: Course[];
     trackingProperties: TrackingProperties;
+    xpGains: XPGain[];
 };

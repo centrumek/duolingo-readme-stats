@@ -22,7 +22,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getUserDetails = void 0;
 const fetch_1 = __importDefault(__nccwpck_require__(2387));
 const getUserDetails = (userId, csrf, jwt) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield (0, fetch_1.default)(`/2017-06-30/users/` + userId + `?fields=id,username,creationDate,streak,inviteURL,totalXp,courses,trackingProperties`, csrf, jwt);
+    return yield (0, fetch_1.default)(`/2017-06-30/users/` + userId + `?fields=id,username,creationDate,streak,inviteURL,totalXp,courses,trackingProperties,xpGains`, csrf, jwt);
 });
 exports.getUserDetails = getUserDetails;
 
@@ -101,7 +101,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.SHOW_LEAGUE = exports.JWT_TOKEN = exports.CSRF_TOKEN = exports.SHOW_FROM_ENGLISH = exports.DUOLINGO_USER_ID = exports.SHOW_LANGUAGES = exports.IS_DEBUG = exports.COMMIT_EMAIL = exports.COMMIT_USERNAME = exports.COMMIT_MSG = exports.FILE_NAME = void 0;
+exports.XP_THIS_WEEK = exports.SHOW_LEAGUE = exports.JWT_TOKEN = exports.CSRF_TOKEN = exports.SHOW_FROM_ENGLISH = exports.DUOLINGO_USER_ID = exports.SHOW_LANGUAGES = exports.IS_DEBUG = exports.COMMIT_EMAIL = exports.COMMIT_USERNAME = exports.COMMIT_MSG = exports.FILE_NAME = void 0;
 const api_1 = __nccwpck_require__(8947);
 const fs = __importStar(__nccwpck_require__(7147));
 const util_1 = __nccwpck_require__(4024);
@@ -118,6 +118,7 @@ exports.SHOW_FROM_ENGLISH = (0, core_1.getInput)('SHOW_FROM_ENGLISH') === 'true'
 exports.CSRF_TOKEN = (0, core_1.getInput)('ADVANCED_TOKEN_CSRF');
 exports.JWT_TOKEN = (0, core_1.getInput)('ADVANCED_TOKEN_JWT');
 exports.SHOW_LEAGUE = (0, core_1.getInput)('SHOW_LEAGUE') === 'true';
+exports.XP_THIS_WEEK = (0, core_1.getInput)('XP_THIS_WEEK') === 'true';
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!exports.DUOLINGO_USER_ID) {
@@ -141,7 +142,7 @@ function buildContent() {
     return __awaiter(this, void 0, void 0, function* () {
         const content = [];
         const userDetails = yield (0, api_1.getUserDetails)(exports.DUOLINGO_USER_ID, exports.CSRF_TOKEN, exports.JWT_TOKEN);
-        content.push((0, util_1.formatOverviewTable)(userDetails.username, userDetails.streak, userDetails.totalXp, exports.SHOW_LEAGUE ? userDetails.trackingProperties.leaderboard_league : false));
+        content.push((0, util_1.formatOverviewTable)(userDetails.username, userDetails.streak, userDetails.totalXp, (exports.XP_THIS_WEEK && userDetails.xpGains != undefined) ? userDetails.xpGains : false, (exports.SHOW_LEAGUE && userDetails.trackingProperties.leaderboard_league) ? userDetails.trackingProperties.leaderboard_league : false));
         if (exports.SHOW_LANGUAGES) {
             if (userDetails.courses.length === 0) {
                 throw new Error('No languages found!');
@@ -297,18 +298,30 @@ const exec = (cmd, args = []) => new Promise((resolve, reject) => {
     });
     childProcess.on('error', reject);
 });
-const formatOverviewTable = (username, streak, totalXp, leagueID) => {
-    var _a, _b, _c, _d;
+const formatOverviewTable = (username, streak, totalXp, xpThisWeek, leagueID) => {
+    var _a, _b, _c, _d, _e;
     const leagues = ["Bronze", "Silver", "Gold", "Sapphire", "Ruby", "Emerald", "Amethyst", "Pearl", "Obsidian", "Diamond"];
-    const tableHeader = `| Username | Day Streak | Total XP |${leagueID === false ? "" : " League |"}`;
-    const tableSeparator = '|' + Array.from({ length: 3 + (leagueID === false ? 0 : 1) }, () => ':---:|').join('');
+    const tableHeader = `| Username | Day Streak | Total XP |${xpThisWeek === false ? "" : " XP This Week |"}${leagueID === false ? "" : " League |"}`;
+    const tableSeparator = '|' + Array.from({ length: 3 + (leagueID === false ? 0 : 1) + (xpThisWeek === false ? 0 : 1) }, () => ':---:|').join('');
     const data = [
         (_a = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/duolingo.png" height="12"> ' + username) !== null && _a !== void 0 ? _a : 'N/A',
         (_b = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/streak.svg" height="12"> ' + streak) !== null && _b !== void 0 ? _b : 'N/A',
         (_c = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXp) !== null && _c !== void 0 ? _c : 'N/A'
     ];
+    if (xpThisWeek !== false) {
+        const now = new Date();
+        const lastReset = new Date(now);
+        lastReset.setUTCHours(0, 0, 0, 0);
+        const dayOfWeek = lastReset.getUTCDay();
+        const daysSinceReset = (dayOfWeek + 6) % 7;
+        lastReset.setUTCDate(now.getUTCDate() - daysSinceReset);
+        const lastResetTimestamp = Math.floor(lastReset.getTime() / 1000);
+        const recentXpGains = xpThisWeek.filter(gain => gain.time > lastResetTimestamp);
+        const totalXpSinceReset = recentXpGains.reduce((total, gain) => total + gain.xp, 0);
+        data.push((_d = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXpSinceReset) !== null && _d !== void 0 ? _d : 'N/A');
+    }
     if (leagueID !== false)
-        data.push((_d = `<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/leagues/${leagues[leagueID].toLowerCase()}.png" height="11"> ` + leagues[leagueID]) !== null && _d !== void 0 ? _d : 'N/A');
+        data.push((_e = `<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/leagues/${leagues[leagueID].toLowerCase()}.png" height="11"> ` + leagues[leagueID]) !== null && _e !== void 0 ? _e : 'N/A');
     const row = `| ${data.join(' | ')} |`;
     return `${tableHeader}\n${tableSeparator}\n${row}\n`;
 };

@@ -41,6 +41,10 @@ inputs:
     description: "Set, whether the user table should show the current league. Requires Duolingo cookies to be passed using ADVANCED_TOKEN_CSRF AND ADVANCED_TOKEN_JWT."
     default: "true"
     required: false
+  XP_THIS_WEEK:
+    description: "Determines, whether the overview table should include XP gained since last leaderboard reset."
+    default: "false"
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'

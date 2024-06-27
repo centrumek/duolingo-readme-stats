@@ -70,3 +70,4 @@ There are a few configuration options you can use in your GitHub Action.
 | ADVANCED_TOKEN_CSRF | One of the cookies necessary to get league info. PLEASE, ONLY PASS VIA GITHUB REPO SECRETS <3 | none | *For certain functions* |
 | ADVANCED_TOKEN_JWT | One of the cookies necessary to get league info. PLEASE, ONLY PASS VIA GITHUB REPO SECRETS <3 | none | *For certain functions* |
 | SHOW_LEAGUE* | Show the user's league in the overview table. *Requires **ADVANCED_TOKEN_CSRF** and **ADVANCED_TOKEN_JWT*** | true | No |
+| XP_THIS_WEEK* | Show the user's XP earned since last leaderboard reset. *Requires **ADVANCED_TOKEN_CSRF** and **ADVANCED_TOKEN_JWT*** | false | No

@@ -24,6 +24,7 @@ export const SHOW_FROM_ENGLISH = getInput('SHOW_FROM_ENGLISH') === 'true';
 export const CSRF_TOKEN = getInput('ADVANCED_TOKEN_CSRF');
 export const JWT_TOKEN = getInput('ADVANCED_TOKEN_JWT');
 export const SHOW_LEAGUE = getInput('SHOW_LEAGUE') === 'true';
+export const XP_THIS_WEEK = getInput('XP_THIS_WEEK') === 'true';
 
 (async () => {
     try {
@@ -49,7 +50,7 @@ async function buildContent() {
 
     const userDetails: UserDetailsResponse = await getUserDetails(DUOLINGO_USER_ID, CSRF_TOKEN, JWT_TOKEN);
 
-    content.push(formatOverviewTable(userDetails.username, userDetails.streak, userDetails.totalXp, SHOW_LEAGUE ? userDetails.trackingProperties.leaderboard_league : false));
+    content.push(formatOverviewTable(userDetails.username, userDetails.streak, userDetails.totalXp, (XP_THIS_WEEK && userDetails.xpGains != undefined) ? userDetails.xpGains : false, (SHOW_LEAGUE && userDetails.trackingProperties.leaderboard_league) ? userDetails.trackingProperties.leaderboard_league : false));
 
     if (SHOW_LANGUAGES) {
         if (userDetails.courses.length === 0) {
