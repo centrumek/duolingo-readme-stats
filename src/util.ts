@@ -116,15 +116,19 @@ const exec = (cmd: string, args: string[] = []) =>
         childProcess.on('error', reject);
     });
 
-export const formatOverviewTable = (username: string, streak: number, totalXp: number): string => {
-    const tableHeader = `| Username | Day Streak | Total XP |`;
+export const formatOverviewTable = (username: string, streak: number, totalXp: number, leagueID: number | false): string => {
+    const leagues = ["Bronze", "Silver", "Gold", "Sapphire", "Ruby", "Emerald", "Amethyst", "Pearl", "Obsidian", "Diamond"]
+    const tableHeader = `| Username | Day Streak | Total XP |${leagueID === false ? "" : " League |"}`;
     const tableSeparator =
-        '|' + Array.from({length: 3}, () => ':---:|').join('');
+        '|' + Array.from({length: 3 + (leagueID === false ? 0 : 1)}, () => ':---:|').join('');
     const data = [
         '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/duolingo.png" height="12"> ' + username ?? 'N/A',
         '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/streak.svg" height="12"> ' + streak ?? 'N/A',
         '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXp ?? 'N/A'
     ];
+
+    if (leagueID !== false)
+        data.push(`<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/leagues/${leagues[leagueID].toLowerCase()}.png" height="12"> ` + leagues[leagueID] ?? 'N/A');
 
     const row = `| ${data.join(' | ')} |`;
 

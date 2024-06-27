@@ -48,8 +48,8 @@ async function buildContent() {
     const content: string[] = [];
 
     const userDetails: UserDetailsResponse = await getUserDetails(DUOLINGO_USER_ID, CSRF_TOKEN, JWT_TOKEN);
-    console.log(userDetails)
-    content.push(formatOverviewTable(userDetails.username, userDetails.streak, userDetails.totalXp));
+
+    content.push(formatOverviewTable(userDetails.username, userDetails.streak, userDetails.totalXp, SHOW_LEAGUE ? userDetails.trackingProperties.leaderboard_league : false));
 
     if (SHOW_LANGUAGES) {
         if (userDetails.courses.length === 0) {

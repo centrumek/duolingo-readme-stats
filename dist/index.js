@@ -141,8 +141,7 @@ function buildContent() {
     return __awaiter(this, void 0, void 0, function* () {
         const content = [];
         const userDetails = yield (0, api_1.getUserDetails)(exports.DUOLINGO_USER_ID, exports.CSRF_TOKEN, exports.JWT_TOKEN);
-        console.log(userDetails);
-        content.push((0, util_1.formatOverviewTable)(userDetails.username, userDetails.streak, userDetails.totalXp));
+        content.push((0, util_1.formatOverviewTable)(userDetails.username, userDetails.streak, userDetails.totalXp, exports.SHOW_LEAGUE ? userDetails.trackingProperties.leaderboard_league : false));
         if (exports.SHOW_LANGUAGES) {
             if (userDetails.courses.length === 0) {
                 throw new Error('No languages found!');
@@ -298,15 +297,18 @@ const exec = (cmd, args = []) => new Promise((resolve, reject) => {
     });
     childProcess.on('error', reject);
 });
-const formatOverviewTable = (username, streak, totalXp) => {
-    var _a, _b, _c;
-    const tableHeader = `| Username | Day Streak | Total XP |`;
-    const tableSeparator = '|' + Array.from({ length: 3 }, () => ':---:|').join('');
+const formatOverviewTable = (username, streak, totalXp, leagueID) => {
+    var _a, _b, _c, _d;
+    const leagues = ["Bronze", "Silver", "Gold", "Sapphire", "Ruby", "Emerald", "Amethyst", "Pearl", "Obsidian", "Diamond"];
+    const tableHeader = `| Username | Day Streak | Total XP |${leagueID === false ? "" : " League |"}`;
+    const tableSeparator = '|' + Array.from({ length: 3 + (leagueID === false ? 0 : 1) }, () => ':---:|').join('');
     const data = [
         (_a = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/duolingo.png" height="12"> ' + username) !== null && _a !== void 0 ? _a : 'N/A',
         (_b = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/streak.svg" height="12"> ' + streak) !== null && _b !== void 0 ? _b : 'N/A',
         (_c = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXp) !== null && _c !== void 0 ? _c : 'N/A'
     ];
+    if (leagueID !== false)
+        data.push((_d = `<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/leagues/${leagues[leagueID].toLowerCase()}.png" height="12"> ` + leagues[leagueID]) !== null && _d !== void 0 ? _d : 'N/A');
     const row = `| ${data.join(' | ')} |`;
     return `${tableHeader}\n${tableSeparator}\n${row}\n`;
 };
