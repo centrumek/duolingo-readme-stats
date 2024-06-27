@@ -67,3 +67,6 @@ There are a few configuration options you can use in your GitHub Action.
 |    FILE_NAME     |       Define a specific file in your repo        |                       README.md                       |    No    |
 |  SHOW_LANGUAGES  |            Toggle the languages table            |                         true                          |    No    |
 | SHOW_FROM_ENGLISH| Determines, whether "(from English)" should be appended to languages learnt from English | false | No |
+| ADVANCED_TOKEN_CSRF | One of the cookies necessary to get league info. PLEASE, ONLY PASS VIA GITHUB REPO SECRETS <3 | none | *For certain functions* |
+| ADVANCED_TOKEN_JWT | One of the cookies necessary to get league info. PLEASE, ONLY PASS VIA GITHUB REPO SECRETS <3 | none | *For certain functions* |
+| SHOW_LEAGUE* | Show the user's league in the overview table. *Requires **ADVANCED_TOKEN_CSRF** and **ADVANCED_TOKEN_JWT*** | true | No |

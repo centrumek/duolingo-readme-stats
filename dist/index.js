@@ -308,7 +308,7 @@ const formatOverviewTable = (username, streak, totalXp, leagueID) => {
         (_c = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXp) !== null && _c !== void 0 ? _c : 'N/A'
     ];
     if (leagueID !== false)
-        data.push((_d = `<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/leagues/${leagues[leagueID].toLowerCase()}.png" height="12"> ` + leagues[leagueID]) !== null && _d !== void 0 ? _d : 'N/A');
+        data.push((_d = `<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/leagues/${leagues[leagueID].toLowerCase()}.png" height="11"> ` + leagues[leagueID]) !== null && _d !== void 0 ? _d : 'N/A');
     const row = `| ${data.join(' | ')} |`;
     return `${tableHeader}\n${tableSeparator}\n${row}\n`;
 };

@@ -128,7 +128,7 @@ export const formatOverviewTable = (username: string, streak: number, totalXp: n
     ];
 
     if (leagueID !== false)
-        data.push(`<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/leagues/${leagues[leagueID].toLowerCase()}.png" height="12"> ` + leagues[leagueID] ?? 'N/A');
+        data.push(`<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/leagues/${leagues[leagueID].toLowerCase()}.png" height="11"> ` + leagues[leagueID] ?? 'N/A');
 
     const row = `| ${data.join(' | ')} |`;
 
