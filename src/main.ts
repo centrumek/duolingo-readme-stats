@@ -21,6 +21,9 @@ export const IS_DEBUG = getInput('IS_DEBUG') === 'true';
 export const SHOW_LANGUAGES = getInput('SHOW_LANGUAGES') === 'true';
 export const DUOLINGO_USER_ID = getInput('DUOLINGO_USER_ID')?.toLowerCase();
 export const SHOW_FROM_ENGLISH = getInput('SHOW_FROM_ENGLISH') === 'true';
+export const CSRF_TOKEN = getInput('ADVANCED_TOKEN_CSRF');
+export const JWT_TOKEN = getInput('ADVANCED_TOKEN_JWT');
+export const SHOW_LEAGUE = getInput('SHOW_LEAGUE') === 'true';
 
 (async () => {
     try {
@@ -44,7 +47,8 @@ export const SHOW_FROM_ENGLISH = getInput('SHOW_FROM_ENGLISH') === 'true';
 async function buildContent() {
     const content: string[] = [];
 
-    const userDetails: UserDetailsResponse = await getUserDetails(DUOLINGO_USER_ID);
+    const userDetails: UserDetailsResponse = await getUserDetails(DUOLINGO_USER_ID, CSRF_TOKEN, JWT_TOKEN);
+    console.log(userDetails)
     content.push(formatOverviewTable(userDetails.username, userDetails.streak, userDetails.totalXp));
 
     if (SHOW_LANGUAGES) {

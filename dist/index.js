@@ -21,8 +21,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getUserDetails = void 0;
 const fetch_1 = __importDefault(__nccwpck_require__(2387));
-const getUserDetails = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield (0, fetch_1.default)(`/2017-06-30/users/` + userId + `?fields=id,username,creationDate,streak,inviteURL,totalXp,courses,trackingProperties`);
+const getUserDetails = (userId, csrf, jwt) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield (0, fetch_1.default)(`/2017-06-30/users/` + userId + `?fields=id,username,creationDate,streak,inviteURL,totalXp,courses,trackingProperties`, csrf, jwt);
 });
 exports.getUserDetails = getUserDetails;
 
@@ -39,14 +39,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const https_1 = __importDefault(__nccwpck_require__(5687));
-function fetch(path) {
+function fetch(path, csrf, jwt) {
     return new Promise((response, reject) => {
         https_1.default.get({
             host: 'www.duolingo.com',
             path: path,
             headers: {
                 'Content-Type': 'application/json',
-                'User-Agent': 'duolingo-readme-stats'
+                'User-Agent': 'duolingo-readme-stats',
+                'Cookie': `csrf_token=${csrf}; jwt_token=${jwt}`
             }
         }, callback => {
             let data = '';
@@ -100,7 +101,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.SHOW_FROM_ENGLISH = exports.DUOLINGO_USER_ID = exports.SHOW_LANGUAGES = exports.IS_DEBUG = exports.COMMIT_EMAIL = exports.COMMIT_USERNAME = exports.COMMIT_MSG = exports.FILE_NAME = void 0;
+exports.SHOW_LEAGUE = exports.JWT_TOKEN = exports.CSRF_TOKEN = exports.SHOW_FROM_ENGLISH = exports.DUOLINGO_USER_ID = exports.SHOW_LANGUAGES = exports.IS_DEBUG = exports.COMMIT_EMAIL = exports.COMMIT_USERNAME = exports.COMMIT_MSG = exports.FILE_NAME = void 0;
 const api_1 = __nccwpck_require__(8947);
 const fs = __importStar(__nccwpck_require__(7147));
 const util_1 = __nccwpck_require__(4024);
@@ -114,6 +115,9 @@ exports.IS_DEBUG = (0, core_1.getInput)('IS_DEBUG') === 'true';
 exports.SHOW_LANGUAGES = (0, core_1.getInput)('SHOW_LANGUAGES') === 'true';
 exports.DUOLINGO_USER_ID = (_a = (0, core_1.getInput)('DUOLINGO_USER_ID')) === null || _a === void 0 ? void 0 : _a.toLowerCase();
 exports.SHOW_FROM_ENGLISH = (0, core_1.getInput)('SHOW_FROM_ENGLISH') === 'true';
+exports.CSRF_TOKEN = (0, core_1.getInput)('ADVANCED_TOKEN_CSRF');
+exports.JWT_TOKEN = (0, core_1.getInput)('ADVANCED_TOKEN_JWT');
+exports.SHOW_LEAGUE = (0, core_1.getInput)('SHOW_LEAGUE') === 'true';
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!exports.DUOLINGO_USER_ID) {
@@ -136,7 +140,8 @@ exports.SHOW_FROM_ENGLISH = (0, core_1.getInput)('SHOW_FROM_ENGLISH') === 'true'
 function buildContent() {
     return __awaiter(this, void 0, void 0, function* () {
         const content = [];
-        const userDetails = yield (0, api_1.getUserDetails)(exports.DUOLINGO_USER_ID);
+        const userDetails = yield (0, api_1.getUserDetails)(exports.DUOLINGO_USER_ID, exports.CSRF_TOKEN, exports.JWT_TOKEN);
+        console.log(userDetails);
         content.push((0, util_1.formatOverviewTable)(userDetails.username, userDetails.streak, userDetails.totalXp));
         if (exports.SHOW_LANGUAGES) {
             if (userDetails.courses.length === 0) {

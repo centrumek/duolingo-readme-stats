@@ -31,6 +31,16 @@ inputs:
     description: "Determines, whether \" (from English)\" should be appended to languages learnt from English, similarly to learning from other languages"
     default: "false"
     required: false
+  ADVANCED_TOKEN_CSRF:
+    description: "Set the Duolingo's CSRF cookie, this is needed for leagues. PLEASE, USE GITHUB REPOSITORY SECRETS <3"
+    required: false
+  ADVANCED_TOKEN_JWT:
+    description: "Set the Duolingo's JWT cookie, this is needed for leagues PLEASE, USE GITHUB REPOSITORY SECRET <3"
+    required: false
+  SHOW_LEAGUE:
+    description: "Set, whether the user table should show the current league. Requires Duolingo cookies to be passed using ADVANCED_TOKEN_CSRF AND ADVANCED_TOKEN_JWT."
+    default: "true"
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'
