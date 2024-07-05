@@ -50,7 +50,22 @@ async function buildContent() {
 
     const userDetails: UserDetailsResponse = await getUserDetails(DUOLINGO_USER_ID, CSRF_TOKEN, JWT_TOKEN);
 
-    content.push(formatOverviewTable(userDetails.username, userDetails.streak, userDetails.totalXp, (XP_THIS_WEEK && userDetails.xpGains != undefined) ? userDetails.xpGains : false, (SHOW_LEAGUE && userDetails.trackingProperties.leaderboard_league) ? userDetails.trackingProperties.leaderboard_league : false));
+    const timezone = userDetails.streakData.updatedTimeZone;
+
+    const now = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        timeZone: timezone,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+    };
+    const formatter = new Intl.DateTimeFormat('en-UK', options);
+    const parts = formatter.formatToParts(now);
+
+    content.push(formatOverviewTable(userDetails.username, userDetails.streak, userDetails.streakData.currentStreak.lastExtendedDate == `${parts.find(p => p.type === 'year')!.value}-${parts.find(p => p.type === 'month')!.value}-${parts.find(p => p.type === 'day')!.value}`, userDetails.totalXp, (XP_THIS_WEEK && userDetails.xpGains != undefined) ? userDetails.xpGains : false, (SHOW_LEAGUE && userDetails.trackingProperties.leaderboard_league) ? userDetails.trackingProperties.leaderboard_league : false));
 
     if (SHOW_LANGUAGES) {
         if (userDetails.courses.length === 0) {

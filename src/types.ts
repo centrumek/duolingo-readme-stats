@@ -18,6 +18,13 @@ export type Course = {
     crowns: number;
 }
 
+export type StreakInfo = {
+    endDate: string;
+    length: number;
+    lastExtendedDate: string;
+    startDate: string;
+}
+
 export type UserDetailsResponse = {
     id: number;
     username: string;
@@ -28,4 +35,12 @@ export type UserDetailsResponse = {
     courses: Course[];
     trackingProperties: TrackingProperties;
     xpGains: XPGain[];
+    streakData: {
+        currentStreak: StreakInfo;
+        previousStreak: StreakInfo;
+        length: number;
+        xpGoal: number;
+        longestStreak: StreakInfo;
+        updatedTimeZone: string;
+    }
 };

@@ -22,7 +22,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getUserDetails = void 0;
 const fetch_1 = __importDefault(__nccwpck_require__(2387));
 const getUserDetails = (userId, csrf, jwt) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield (0, fetch_1.default)(`/2017-06-30/users/` + userId + `?fields=id,username,creationDate,streak,inviteURL,totalXp,courses,trackingProperties,xpGains`, csrf, jwt);
+    return yield (0, fetch_1.default)(`/2017-06-30/users/` + userId + `?fields=id,username,creationDate,streak,inviteURL,totalXp,courses,trackingProperties,xpGains,streakData`, csrf, jwt);
 });
 exports.getUserDetails = getUserDetails;
 
@@ -142,7 +142,20 @@ function buildContent() {
     return __awaiter(this, void 0, void 0, function* () {
         const content = [];
         const userDetails = yield (0, api_1.getUserDetails)(exports.DUOLINGO_USER_ID, exports.CSRF_TOKEN, exports.JWT_TOKEN);
-        content.push((0, util_1.formatOverviewTable)(userDetails.username, userDetails.streak, userDetails.totalXp, (exports.XP_THIS_WEEK && userDetails.xpGains != undefined) ? userDetails.xpGains : false, (exports.SHOW_LEAGUE && userDetails.trackingProperties.leaderboard_league) ? userDetails.trackingProperties.leaderboard_league : false));
+        const timezone = userDetails.streakData.updatedTimeZone;
+        const now = new Date();
+        const options = {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            timeZone: timezone,
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        };
+        const formatter = new Intl.DateTimeFormat('en-UK', options);
+        const parts = formatter.formatToParts(now);
+        content.push((0, util_1.formatOverviewTable)(userDetails.username, userDetails.streak, userDetails.streakData.currentStreak.lastExtendedDate == `${parts.find(p => p.type === 'year').value}-${parts.find(p => p.type === 'month').value}-${parts.find(p => p.type === 'day').value}`, userDetails.totalXp, (exports.XP_THIS_WEEK && userDetails.xpGains != undefined) ? userDetails.xpGains : false, (exports.SHOW_LEAGUE && userDetails.trackingProperties.leaderboard_league) ? userDetails.trackingProperties.leaderboard_league : false));
         if (exports.SHOW_LANGUAGES) {
             if (userDetails.courses.length === 0) {
                 throw new Error('No languages found!');
@@ -298,14 +311,14 @@ const exec = (cmd, args = []) => new Promise((resolve, reject) => {
     });
     childProcess.on('error', reject);
 });
-const formatOverviewTable = (username, streak, totalXp, xpThisWeek, leagueID) => {
+const formatOverviewTable = (username, streak, streakExtendedToday, totalXp, xpThisWeek, leagueID) => {
     var _a, _b, _c, _d, _e;
     const leagues = ["Bronze", "Silver", "Gold", "Sapphire", "Ruby", "Emerald", "Amethyst", "Pearl", "Obsidian", "Diamond"];
     const tableHeader = `| Username | Day Streak | Total XP |${xpThisWeek === false ? "" : " XP This Week |"}${leagueID === false ? "" : " League |"}`;
     const tableSeparator = '|' + Array.from({ length: 3 + (leagueID === false ? 0 : 1) + (xpThisWeek === false ? 0 : 1) }, () => ':---:|').join('');
     const data = [
         (_a = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/duolingo.png" height="12"> ' + username) !== null && _a !== void 0 ? _a : 'N/A',
-        (_b = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/streak.svg" height="12"> ' + streak) !== null && _b !== void 0 ? _b : 'N/A',
+        (_b = `<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/streak${streakExtendedToday ? '' : 'in'}active.svg" height="12"> ` + streak) !== null && _b !== void 0 ? _b : 'N/A',
         (_c = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXp) !== null && _c !== void 0 ? _c : 'N/A'
     ];
     if (xpThisWeek !== false) {

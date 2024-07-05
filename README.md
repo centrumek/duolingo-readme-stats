@@ -30,6 +30,7 @@ name: Duolingo README Stats Action
 on:
   schedule:
     - cron: '0 0 * * *' # Runs at 00:00 UTC every day
+    - cron: '0 22 * * *' # Runs at 00:00 CET every day - updates streak, change 22 to your timezone's midnight in UTC
   workflow_dispatch:
 
 jobs:
@@ -69,5 +70,5 @@ There are a few configuration options you can use in your GitHub Action.
 | SHOW_FROM_ENGLISH| Determines, whether "(from English)" should be appended to languages learnt from English | false | No |
 | ADVANCED_TOKEN_CSRF | One of the cookies necessary to get league info. PLEASE, ONLY PASS VIA GITHUB REPO SECRETS <3 | none | *For certain functions* |
 | ADVANCED_TOKEN_JWT | One of the cookies necessary to get league info. PLEASE, ONLY PASS VIA GITHUB REPO SECRETS <3 | none | *For certain functions* |
-| SHOW_LEAGUE* | Show the user's league in the overview table. *Requires **ADVANCED_TOKEN_CSRF** and **ADVANCED_TOKEN_JWT*** | true | No |
-| XP_THIS_WEEK* | Show the user's XP earned since last leaderboard reset. *Requires **ADVANCED_TOKEN_CSRF** and **ADVANCED_TOKEN_JWT*** | false | No
+| SHOW_LEAGUE* | Show the user's league in the overview table. *Requires **ADVANCED_TOKEN_CSRF** and **ADVANCED_TOKEN_JWT**.* If you use this, I recommend you to add `- cron: '0 0 * * 1'` to the scheduling. | true | No |
+| XP_THIS_WEEK* | Show the user's XP earned since last leaderboard reset. *Requires **ADVANCED_TOKEN_CSRF** and **ADVANCED_TOKEN_JWT**.* If you use this, I recommend you to add `- cron: '0 0 * * 1'` to the scheduling. | false | No
