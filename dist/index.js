@@ -155,7 +155,22 @@ function buildContent() {
         };
         const formatter = new Intl.DateTimeFormat('en-UK', options);
         const parts = formatter.formatToParts(now);
-        content.push((0, util_1.formatOverviewTable)(userDetails.username, userDetails.streak, userDetails.streakData.currentStreak.lastExtendedDate == `${parts.find(p => p.type === 'year').value}-${parts.find(p => p.type === 'month').value}-${parts.find(p => p.type === 'day').value}`, userDetails.totalXp, (exports.XP_THIS_WEEK && userDetails.xpGains != undefined) ? userDetails.xpGains : false, (exports.SHOW_LEAGUE && userDetails.trackingProperties.leaderboard_league) ? userDetails.trackingProperties.leaderboard_league : false));
+        const formattedToday = `${parts.find(p => p.type === 'year').value}-${parts.find(p => p.type === 'month').value}-${parts.find(p => p.type === 'day').value}`;
+        // Parse the last extended date and the current date in the specified timezone
+        const lastExtendedDate = new Date(userDetails.streakData.currentStreak.lastExtendedDate);
+        const currentDateInTimeZone = new Date(now.toLocaleString('en-US', { timeZone: timezone }));
+        // Calculate the difference in time
+        const timeDifference = currentDateInTimeZone.getTime() - lastExtendedDate.getTime();
+        const daysDifference = timeDifference / (1000 * 3600 * 24);
+        // Determine the streak status
+        let streakStatus = null;
+        if (daysDifference <= 2) {
+            streakStatus = userDetails.streakData.currentStreak.lastExtendedDate === formattedToday;
+        }
+        else {
+            streakStatus = null; // Streak is frozen
+        }
+        content.push((0, util_1.formatOverviewTable)(userDetails.username, userDetails.streak, streakStatus, userDetails.totalXp, (exports.XP_THIS_WEEK && userDetails.xpGains != undefined) ? userDetails.xpGains : false, (exports.SHOW_LEAGUE && userDetails.trackingProperties.leaderboard_league) ? userDetails.trackingProperties.leaderboard_league : false));
         if (exports.SHOW_LANGUAGES) {
             if (userDetails.courses.length === 0) {
                 throw new Error('No languages found!');
@@ -318,7 +333,7 @@ const formatOverviewTable = (username, streak, streakExtendedToday, totalXp, xpT
     const tableSeparator = '|' + Array.from({ length: 3 + (leagueID === false ? 0 : 1) + (xpThisWeek === false ? 0 : 1) }, () => ':---:|').join('');
     const data = [
         (_a = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/duolingo.png" height="12"> ' + username) !== null && _a !== void 0 ? _a : 'N/A',
-        (_b = `<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/streak${streakExtendedToday ? '' : 'in'}active.svg" height="12"> ` + streak) !== null && _b !== void 0 ? _b : 'N/A',
+        (_b = `<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/streak${streakExtendedToday == true ? 'active' : streakExtendedToday == false ? 'inactive' : 'frozen'}.svg" height="12"> ` + streak) !== null && _b !== void 0 ? _b : 'N/A',
         (_c = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXp) !== null && _c !== void 0 ? _c : 'N/A'
     ];
     if (xpThisWeek !== false) {

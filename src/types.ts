@@ -25,6 +25,13 @@ export type StreakInfo = {
     startDate: string;
 }
 
+export type TopStreakInfo = {
+    endDate: string;
+    length: number;
+    achieveDate: string;
+    startDate: string;
+}
+
 export type UserDetailsResponse = {
     id: number;
     username: string;
@@ -40,7 +47,7 @@ export type UserDetailsResponse = {
         previousStreak: StreakInfo;
         length: number;
         xpGoal: number;
-        longestStreak: StreakInfo;
+        longestStreak: TopStreakInfo;
         updatedTimeZone: string;
     }
 };

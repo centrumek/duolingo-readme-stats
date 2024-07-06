@@ -65,7 +65,32 @@ async function buildContent() {
     const formatter = new Intl.DateTimeFormat('en-UK', options);
     const parts = formatter.formatToParts(now);
 
-    content.push(formatOverviewTable(userDetails.username, userDetails.streak, userDetails.streakData.currentStreak.lastExtendedDate == `${parts.find(p => p.type === 'year')!.value}-${parts.find(p => p.type === 'month')!.value}-${parts.find(p => p.type === 'day')!.value}`, userDetails.totalXp, (XP_THIS_WEEK && userDetails.xpGains != undefined) ? userDetails.xpGains : false, (SHOW_LEAGUE && userDetails.trackingProperties.leaderboard_league) ? userDetails.trackingProperties.leaderboard_league : false));
+    const formattedToday = `${parts.find(p => p.type === 'year')!.value}-${parts.find(p => p.type === 'month')!.value}-${parts.find(p => p.type === 'day')!.value}`;
+
+    // Parse the last extended date and the current date in the specified timezone
+    const lastExtendedDate = new Date(userDetails.streakData.currentStreak.lastExtendedDate);
+    const currentDateInTimeZone = new Date(now.toLocaleString('en-US', { timeZone: timezone }));
+
+    // Calculate the difference in time
+    const timeDifference = currentDateInTimeZone.getTime() - lastExtendedDate.getTime();
+    const daysDifference = timeDifference / (1000 * 3600 * 24);
+
+    // Determine the streak status
+    let streakStatus: boolean | null = null;
+    if (daysDifference <= 2) {
+        streakStatus = userDetails.streakData.currentStreak.lastExtendedDate === formattedToday;
+    } else {
+        streakStatus = null; // Streak is frozen
+    }
+
+    content.push(formatOverviewTable(
+        userDetails.username, 
+        userDetails.streak, 
+        streakStatus, 
+        userDetails.totalXp, 
+        (XP_THIS_WEEK && userDetails.xpGains != undefined) ? userDetails.xpGains : false, 
+        (SHOW_LEAGUE && userDetails.trackingProperties.leaderboard_league) ? userDetails.trackingProperties.leaderboard_league : false)
+    );
 
     if (SHOW_LANGUAGES) {
         if (userDetails.courses.length === 0) {
