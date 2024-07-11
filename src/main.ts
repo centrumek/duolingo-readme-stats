@@ -19,7 +19,7 @@ export const COMMIT_USERNAME = getInput('COMMIT_MSG');
 export const COMMIT_EMAIL = getInput('COMMIT_MSG');
 export const IS_DEBUG = getInput('IS_DEBUG').toLowerCase() === 'true';
 export const SHOW_LANGUAGES = getInput('SHOW_LANGUAGES').toLowerCase() === 'true';
-export const DUOLINGO_USER_ID = "730772122";
+export const DUOLINGO_USER_ID = getInput('DUOLINGO_USER_ID');
 export const SHOW_FROM_ENGLISH = getInput('SHOW_FROM_ENGLISH').toLowerCase() === 'true';
 export const CSRF_TOKEN = getInput('ADVANCED_TOKEN_CSRF');
 export const JWT_TOKEN = getInput('ADVANCED_TOKEN_JWT');

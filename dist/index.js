@@ -112,7 +112,7 @@ exports.COMMIT_USERNAME = (0, core_1.getInput)('COMMIT_MSG');
 exports.COMMIT_EMAIL = (0, core_1.getInput)('COMMIT_MSG');
 exports.IS_DEBUG = (0, core_1.getInput)('IS_DEBUG').toLowerCase() === 'true';
 exports.SHOW_LANGUAGES = (0, core_1.getInput)('SHOW_LANGUAGES').toLowerCase() === 'true';
-exports.DUOLINGO_USER_ID = "730772122";
+exports.DUOLINGO_USER_ID = (0, core_1.getInput)('DUOLINGO_USER_ID');
 exports.SHOW_FROM_ENGLISH = (0, core_1.getInput)('SHOW_FROM_ENGLISH').toLowerCase() === 'true';
 exports.CSRF_TOKEN = (0, core_1.getInput)('ADVANCED_TOKEN_CSRF');
 exports.JWT_TOKEN = (0, core_1.getInput)('ADVANCED_TOKEN_JWT');
