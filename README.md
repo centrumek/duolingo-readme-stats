@@ -1,6 +1,7 @@
 # <img src="./assets/duolingo.png" alt="lplp" width="20" height="20"> Duolingo README Stats <img src="./assets/duolingo.png" alt="lplp" width="20" height="20">
 
 Automatically add and keep up to date your latest stats from [duolingo.com](https://www.duolingo.com/).
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/RichardKanshen/duolingo-readme-stats/duolingo-test-noauth.yml?style=flat-square&label=Duolingo%20Stats%20-%20Unauthenticated)](https://github.com/RichardKanshen/duolingo-readme-stats/blob/main/README-DEMO-NOAUTH.md) [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/RichardKanshen/duolingo-readme-stats/duolingo-test-auth.yml?style=flat-square&label=Duolingo%20Stats%20-%20Authenticated)](https://github.com/RichardKanshen/duolingo-readme-stats/blob/main/README-DEMO-AUTH.md)
 
 | Username | Day Streak | Total XP |
 |:---:|:---:|:---:|

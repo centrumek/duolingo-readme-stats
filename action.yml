@@ -42,7 +42,7 @@ inputs:
     default: "true"
     required: false
   XP_THIS_WEEK:
-    description: "Determines, whether the overview table should include XP gained since last leaderboard reset."
+    description: "Determines, whether the overview table should include XP gained since last leaderboard reset. Requires Duolingo cookies to be passed using ADVANCED_TOKEN_CSRF AND ADVANCED_TOKEN_JWT."
     default: "false"
     required: false
   SHOW_STREAK_TIMEZONE:
