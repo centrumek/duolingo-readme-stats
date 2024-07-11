@@ -5,7 +5,7 @@ import { SHOW_FROM_ENGLISH, SHOW_STREAK_TIMEZONE } from "./main";
 
 export const START_TOKEN = '<!--START_SECTION:duolingoStats-->';
 export const END_TOKEN = '<!--END_SECTION:duolingoStats-->';
-export const INFO_LINE = '<!-- Automatically generated with https://github.com/centrumek/duolingo-readme-stats-->\n';
+export const INFO_LINE = '<!-- Automatically generated with https://github.com/RichardKanshen/duolingo-readme-stats-->\n';
 
 export const langsISO: { [key: string]: string } = {
     "en": "English",
