@@ -101,7 +101,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.XP_THIS_WEEK = exports.SHOW_LEAGUE = exports.JWT_TOKEN = exports.CSRF_TOKEN = exports.SHOW_FROM_ENGLISH = exports.DUOLINGO_USER_ID = exports.SHOW_LANGUAGES = exports.IS_DEBUG = exports.COMMIT_EMAIL = exports.COMMIT_USERNAME = exports.COMMIT_MSG = exports.FILE_NAME = void 0;
+exports.SHOW_STREAK_TIMEZONE = exports.XP_THIS_WEEK = exports.SHOW_LEAGUE = exports.JWT_TOKEN = exports.CSRF_TOKEN = exports.SHOW_FROM_ENGLISH = exports.DUOLINGO_USER_ID = exports.SHOW_LANGUAGES = exports.IS_DEBUG = exports.COMMIT_EMAIL = exports.COMMIT_USERNAME = exports.COMMIT_MSG = exports.FILE_NAME = void 0;
 const api_1 = __nccwpck_require__(8947);
 const fs = __importStar(__nccwpck_require__(7147));
 const util_1 = __nccwpck_require__(4024);
@@ -111,14 +111,15 @@ exports.FILE_NAME = (0, core_1.getInput)('FILE_NAME');
 exports.COMMIT_MSG = (0, core_1.getInput)('COMMIT_MSG');
 exports.COMMIT_USERNAME = (0, core_1.getInput)('COMMIT_MSG');
 exports.COMMIT_EMAIL = (0, core_1.getInput)('COMMIT_MSG');
-exports.IS_DEBUG = (0, core_1.getInput)('IS_DEBUG') === 'true';
-exports.SHOW_LANGUAGES = (0, core_1.getInput)('SHOW_LANGUAGES') === 'true';
+exports.IS_DEBUG = (0, core_1.getInput)('IS_DEBUG').toLowerCase() === 'true';
+exports.SHOW_LANGUAGES = (0, core_1.getInput)('SHOW_LANGUAGES').toLowerCase() === 'true';
 exports.DUOLINGO_USER_ID = (_a = (0, core_1.getInput)('DUOLINGO_USER_ID')) === null || _a === void 0 ? void 0 : _a.toLowerCase();
-exports.SHOW_FROM_ENGLISH = (0, core_1.getInput)('SHOW_FROM_ENGLISH') === 'true';
+exports.SHOW_FROM_ENGLISH = (0, core_1.getInput)('SHOW_FROM_ENGLISH').toLowerCase() === 'true';
 exports.CSRF_TOKEN = (0, core_1.getInput)('ADVANCED_TOKEN_CSRF');
 exports.JWT_TOKEN = (0, core_1.getInput)('ADVANCED_TOKEN_JWT');
-exports.SHOW_LEAGUE = (0, core_1.getInput)('SHOW_LEAGUE') === 'true';
-exports.XP_THIS_WEEK = (0, core_1.getInput)('XP_THIS_WEEK') === 'true';
+exports.SHOW_LEAGUE = (0, core_1.getInput)('SHOW_LEAGUE').toLowerCase() === 'true';
+exports.XP_THIS_WEEK = (0, core_1.getInput)('XP_THIS_WEEK').toLowerCase() === 'true';
+exports.SHOW_STREAK_TIMEZONE = (0, core_1.getInput)('SHOW_STREAK_TIMEZONE').toLowerCase() === 'true';
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!exports.DUOLINGO_USER_ID) {
@@ -170,7 +171,7 @@ function buildContent() {
         else {
             streakStatus = null; // Streak is frozen
         }
-        content.push((0, util_1.formatOverviewTable)(userDetails.username, userDetails.streak, streakStatus, userDetails.totalXp, (exports.XP_THIS_WEEK && userDetails.xpGains != undefined) ? userDetails.xpGains : false, (exports.SHOW_LEAGUE && userDetails.trackingProperties.leaderboard_league) ? userDetails.trackingProperties.leaderboard_league : false));
+        content.push((0, util_1.formatOverviewTable)(userDetails.username, userDetails.streak, streakStatus, userDetails.totalXp, (exports.XP_THIS_WEEK && userDetails.xpGains != undefined) ? userDetails.xpGains : false, (exports.SHOW_LEAGUE && userDetails.trackingProperties.leaderboard_league) ? userDetails.trackingProperties.leaderboard_league : false, (exports.SHOW_STREAK_TIMEZONE && userDetails.streakData.updatedTimeZone) ? userDetails.streakData.updatedTimeZone : false));
         if (exports.SHOW_LANGUAGES) {
             if (userDetails.courses.length === 0) {
                 throw new Error('No languages found!');
@@ -326,10 +327,10 @@ const exec = (cmd, args = []) => new Promise((resolve, reject) => {
     });
     childProcess.on('error', reject);
 });
-const formatOverviewTable = (username, streak, streakExtendedToday, totalXp, xpThisWeek, leagueID) => {
+const formatOverviewTable = (username, streak, streakExtendedToday, totalXp, xpThisWeek, leagueID, streakTimeZone) => {
     var _a, _b, _c, _d, _e;
     const leagues = ["Bronze", "Silver", "Gold", "Sapphire", "Ruby", "Emerald", "Amethyst", "Pearl", "Obsidian", "Diamond"];
-    const tableHeader = `| Username | Day Streak | Total XP |${xpThisWeek === false ? "" : " XP This Week |"}${leagueID === false ? "" : " League |"}`;
+    const tableHeader = `| Username | Day Streak${main_1.SHOW_STREAK_TIMEZONE === true && streakTimeZone ? " (" + new Intl.DateTimeFormat('en-UK', { timeZone: streakTimeZone, timeZoneName: 'short' }).format(new Date()).split(", ")[1] + ")" : ""} | Total XP |${xpThisWeek === false ? "" : " XP This Week |"}${leagueID === false ? "" : " League |"}`;
     const tableSeparator = '|' + Array.from({ length: 3 + (leagueID === false ? 0 : 1) + (xpThisWeek === false ? 0 : 1) }, () => ':---:|').join('');
     const data = [
         (_a = '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/duolingo.png" height="12"> ' + username) !== null && _a !== void 0 ? _a : 'N/A',

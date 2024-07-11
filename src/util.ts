@@ -1,7 +1,7 @@
 import {Course,XPGain} from "./types";
 import {spawn} from "node:child_process";
 import {setFailed} from "@actions/core";
-import { SHOW_FROM_ENGLISH } from "./main";
+import { SHOW_FROM_ENGLISH, SHOW_STREAK_TIMEZONE } from "./main";
 
 export const START_TOKEN = '<!--START_SECTION:duolingoStats-->';
 export const END_TOKEN = '<!--END_SECTION:duolingoStats-->';
@@ -116,9 +116,9 @@ const exec = (cmd: string, args: string[] = []) =>
         childProcess.on('error', reject);
     });
 
-export const formatOverviewTable = (username: string, streak: number, streakExtendedToday: boolean | null, totalXp: number, xpThisWeek: XPGain[] | false, leagueID: number | false): string => {
+export const formatOverviewTable = (username: string, streak: number, streakExtendedToday: boolean | null, totalXp: number, xpThisWeek: XPGain[] | false, leagueID: number | false, streakTimeZone: string | false): string => {
     const leagues = ["Bronze", "Silver", "Gold", "Sapphire", "Ruby", "Emerald", "Amethyst", "Pearl", "Obsidian", "Diamond"]
-    const tableHeader = `| Username | Day Streak | Total XP |${xpThisWeek === false ? "" : " XP This Week |"}${leagueID === false ? "" : " League |"}`;
+    const tableHeader = `| Username | Day Streak${SHOW_STREAK_TIMEZONE === true && streakTimeZone ? " (" + new Intl.DateTimeFormat('en-UK', { timeZone: streakTimeZone, timeZoneName: 'short' }).format(new Date()).split(", ")[1] + ")" : ""} | Total XP |${xpThisWeek === false ? "" : " XP This Week |"}${leagueID === false ? "" : " League |"}`;
     const tableSeparator =
         '|' + Array.from({length: 3 + (leagueID === false ? 0 : 1) + (xpThisWeek === false ? 0 : 1)}, () => ':---:|').join('');
     const data = [

@@ -45,6 +45,10 @@ inputs:
     description: "Determines, whether the overview table should include XP gained since last leaderboard reset."
     default: "false"
     required: false
+  SHOW_STREAK_TIMEZONE:
+    description: "Set, whether the 'Day Streak' section should include the timezone streak is measured in."
+    default: "false"
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'

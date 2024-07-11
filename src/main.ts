@@ -17,14 +17,15 @@ export const FILE_NAME = getInput('FILE_NAME');
 export const COMMIT_MSG = getInput('COMMIT_MSG');
 export const COMMIT_USERNAME = getInput('COMMIT_MSG');
 export const COMMIT_EMAIL = getInput('COMMIT_MSG');
-export const IS_DEBUG = getInput('IS_DEBUG') === 'true';
-export const SHOW_LANGUAGES = getInput('SHOW_LANGUAGES') === 'true';
+export const IS_DEBUG = getInput('IS_DEBUG').toLowerCase() === 'true';
+export const SHOW_LANGUAGES = getInput('SHOW_LANGUAGES').toLowerCase() === 'true';
 export const DUOLINGO_USER_ID = getInput('DUOLINGO_USER_ID')?.toLowerCase();
-export const SHOW_FROM_ENGLISH = getInput('SHOW_FROM_ENGLISH') === 'true';
+export const SHOW_FROM_ENGLISH = getInput('SHOW_FROM_ENGLISH').toLowerCase() === 'true';
 export const CSRF_TOKEN = getInput('ADVANCED_TOKEN_CSRF');
 export const JWT_TOKEN = getInput('ADVANCED_TOKEN_JWT');
-export const SHOW_LEAGUE = getInput('SHOW_LEAGUE') === 'true';
-export const XP_THIS_WEEK = getInput('XP_THIS_WEEK') === 'true';
+export const SHOW_LEAGUE = getInput('SHOW_LEAGUE').toLowerCase() === 'true';
+export const XP_THIS_WEEK = getInput('XP_THIS_WEEK').toLowerCase() === 'true';
+export const SHOW_STREAK_TIMEZONE = getInput('SHOW_STREAK_TIMEZONE').toLowerCase() === 'true';
 
 (async () => {
     try {
@@ -89,7 +90,8 @@ async function buildContent() {
         streakStatus, 
         userDetails.totalXp, 
         (XP_THIS_WEEK && userDetails.xpGains != undefined) ? userDetails.xpGains : false, 
-        (SHOW_LEAGUE && userDetails.trackingProperties.leaderboard_league) ? userDetails.trackingProperties.leaderboard_league : false)
+        (SHOW_LEAGUE && userDetails.trackingProperties.leaderboard_league) ? userDetails.trackingProperties.leaderboard_league : false,
+        (SHOW_STREAK_TIMEZONE && userDetails.streakData.updatedTimeZone) ? userDetails.streakData.updatedTimeZone : false)
     );
 
     if (SHOW_LANGUAGES) {
