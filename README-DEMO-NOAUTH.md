@@ -5,7 +5,7 @@ This file can be your README.md that gets automatically updated.
 The content genrated by the action starts here:
 
 <!--START_SECTION:duolingoStats-->
-<!-- Automatically generated with https://github.com/centrumek/duolingo-readme-stats-->
+<!-- Automatically generated with https://github.com/RichardKanshen/duolingo-readme-stats-->
 
 | Username | Day Streak (CEST) | Total XP |
 |:---:|:---:|:---:|
