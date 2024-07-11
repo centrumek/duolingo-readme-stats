@@ -2,15 +2,15 @@
 
 Automatically add and keep up to date your latest stats from [duolingo.com](https://www.duolingo.com/).
 
-|   Username   | Day Streak | Total XP |
-|:------------:|:----------:|:--------:|
-| 👤 Centrumek |   🔥 257   | ⚡ 23871  |
+| Username | Day Streak | Total XP |
+|:---:|:---:|:---:|
+| <img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/duolingo.png" height="12"> Centrumek | <img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/streakinactive.svg" height="12"> 498 | <img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> 28588 |
 
-|    Language    | Level |   XP    |
-|:--------------:|:-----:|:-------:|
-| 🇺🇦 Ukrainian | 👑 36 | ⚡ 8965  |
-| 🇯🇵 Japanese  | 👑 9  | ⚡ 4780  |
-|  🇪🇸 Spanish  | 👑 76 | ⚡ 10126 |
+| Language | XP |
+|:---:|:---:|
+| <img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/langs/ukrainian.svg" height="12"> Ukrainian | <img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> 12488 |
+| <img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/langs/spanish.svg" height="12"> Spanish | <img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> 10746 |
+| <img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/langs/japanese.svg" height="12"> Japanese | <img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> 5354 |
 
 ## Usage
 
