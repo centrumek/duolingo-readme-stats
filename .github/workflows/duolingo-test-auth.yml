@@ -1,11 +1,8 @@
 name: Duolingo README Stats - AUTH
 
 on:
-  push:
-    branches:
-      - main
-  schedule:
-    - cron: '0 0 * * *' # Runs at 00:00 UTC every day
+  workflow_run:
+    workflows: ["Duolingo README Stats - NO AUTH"]
   workflow_dispatch:
 
 jobs:
