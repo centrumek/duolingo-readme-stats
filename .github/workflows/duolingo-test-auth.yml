@@ -3,6 +3,8 @@ name: Duolingo README Stats - AUTH
 on:
   workflow_run:
     workflows: ["Duolingo README Stats - NO AUTH"]
+    types:
+      - completed
   workflow_dispatch:
 
 jobs:
