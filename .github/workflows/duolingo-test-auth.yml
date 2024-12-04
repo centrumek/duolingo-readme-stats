@@ -1,0 +1,28 @@
+name: Duolingo README Stats - AUTH
+
+on:
+  workflow_run:
+    workflows: ["Duolingo README Stats - NO AUTH"]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  update-auth:
+    name: Update readme with your duolingo stats
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./
+        with:
+          DUOLINGO_USER_ID: 745993669
+          SHOW_FROM_ENGLISH: true
+          ADVANCED_TOKEN_CSRF: ${{ secrets.DUOLINGO_CSRF }}
+          ADVANCED_TOKEN_JWT: ${{ secrets.DUOLINGO_JWT }}
+          SHOW_LEAGUE: true # Requires Advanced Tokens, but SHOULD NOT FAIL THE SCRIPT WITHOUT THEM - Info will just not be retrieved
+          XP_THIS_WEEK: true # Requires Advanced Tokens, but SHOULD NOT FAIL THE SCRIPT WITHOUT THEM - Info will just not be retrieved
+          SHOW_STREAK_TIMEZONE: true
+          FILE_NAME: README-DEMO-AUTH.md
+          SHOW_LANGUAGES: true

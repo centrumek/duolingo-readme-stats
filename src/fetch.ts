@@ -1,6 +1,6 @@
 import https from 'https';
 
-export default function fetch<Type>(path: string): Promise<Type> {
+export default function fetch<Type>(path: string, jwt?: string): Promise<Type> {
     return new Promise<Type>((response, reject) => {
         https.get(
             {
@@ -8,7 +8,8 @@ export default function fetch<Type>(path: string): Promise<Type> {
                 path: path,
                 headers: {
                     'Content-Type': 'application/json',
-                    'User-Agent': 'duolingo-readme-stats'
+                    'User-Agent': 'duolingo-readme-stats',
+                    'Cookie': `jwt_token=${jwt}`
                 }
             },
             callback => {

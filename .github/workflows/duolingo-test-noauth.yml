@@ -1,0 +1,27 @@
+name: Duolingo README Stats - NO AUTH
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * *' # Runs at 00:00 UTC every day
+  workflow_dispatch:
+
+jobs:
+  update-noauth:
+    name: Update readme with your duolingo stats
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./
+        with:
+          DUOLINGO_USER_ID: 745993669
+          SHOW_FROM_ENGLISH: true
+          SHOW_LEAGUE: true # Requires Advanced Tokens, but SHOULD NOT FAIL THE SCRIPT WITHOUT THEM - Info will just not be retrieved
+          XP_THIS_WEEK: true # Requires Advanced Tokens, but SHOULD NOT FAIL THE SCRIPT WITHOUT THEM - Info will just not be retrieved
+          SHOW_STREAK_TIMEZONE: true
+          FILE_NAME: README-DEMO-NOAUTH.md
+          SHOW_LANGUAGES: true
