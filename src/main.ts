@@ -9,23 +9,22 @@ import {
     setFailure,
     START_TOKEN
 } from "./util";
-import {UserDetailsResponse} from "./types";
+import {StreakData, UserDetailsResponse} from "./types";
 import {getInput} from "@actions/core";
 
 // Public parameters
-export const FILE_NAME = getInput('FILE_NAME');
+export const COMMIT_EMAIL = getInput('COMMIT_MSG');
 export const COMMIT_MSG = getInput('COMMIT_MSG');
 export const COMMIT_USERNAME = getInput('COMMIT_MSG');
-export const COMMIT_EMAIL = getInput('COMMIT_MSG');
-export const IS_DEBUG = getInput('IS_DEBUG').toLowerCase() === 'true';
-export const SHOW_LANGUAGES = getInput('SHOW_LANGUAGES').toLowerCase() === 'true';
 export const DUOLINGO_USER_ID = getInput('DUOLINGO_USER_ID');
-export const SHOW_FROM_ENGLISH = getInput('SHOW_FROM_ENGLISH').toLowerCase() === 'true';
-export const CSRF_TOKEN = getInput('ADVANCED_TOKEN_CSRF');
+export const FILE_NAME = getInput('FILE_NAME');
+export const IS_DEBUG = getInput('IS_DEBUG').toLowerCase() === 'true';
 export const JWT_TOKEN = getInput('ADVANCED_TOKEN_JWT');
+export const SHOW_FROM_ENGLISH = getInput('SHOW_FROM_ENGLISH').toLowerCase() === 'true';
+export const SHOW_LANGUAGES = getInput('SHOW_LANGUAGES').toLowerCase() === 'true';
 export const SHOW_LEAGUE = getInput('SHOW_LEAGUE').toLowerCase() === 'true';
-export const XP_THIS_WEEK = getInput('XP_THIS_WEEK').toLowerCase() === 'true';
 export const SHOW_STREAK_TIMEZONE = getInput('SHOW_STREAK_TIMEZONE').toLowerCase() === 'true';
+export const SHOW_XP_THIS_WEEK = getInput('SHOW_XP_THIS_WEEK').toLowerCase() === 'true';
 
 (async () => {
     try {
@@ -49,9 +48,39 @@ export const SHOW_STREAK_TIMEZONE = getInput('SHOW_STREAK_TIMEZONE').toLowerCase
 async function buildContent() {
     const content: string[] = [];
 
-    const userDetails: UserDetailsResponse = await getUserDetails(DUOLINGO_USER_ID, CSRF_TOKEN, JWT_TOKEN);
+    const userDetails: UserDetailsResponse = await getUserDetails(DUOLINGO_USER_ID, JWT_TOKEN);
 
-    const timezone = userDetails.streakData.updatedTimeZone;
+    if(SHOW_XP_THIS_WEEK && userDetails.xpGains == undefined) {
+        throw new Error('No languages found!');
+    }
+
+    let streakStatus = calculateStreakStatus(userDetails.streakData)
+    let xpThisWeek = (SHOW_XP_THIS_WEEK && userDetails.xpGains != undefined) ? userDetails.xpGains : [];
+    let leagueId = (SHOW_LEAGUE && userDetails.trackingProperties && userDetails.trackingProperties.leaderboard_league != undefined)
+        ? userDetails.trackingProperties.leaderboard_league : null
+    let streakTimeZone = (SHOW_STREAK_TIMEZONE && userDetails.streakData && userDetails.streakData.updatedTimeZone != undefined) ? userDetails.streakData.updatedTimeZone : null;
+
+    content.push(formatOverviewTable(
+        userDetails.username,
+        userDetails.streak,
+        streakStatus,
+        userDetails.totalXp,
+        xpThisWeek,
+        leagueId,
+        streakTimeZone));
+
+    if (SHOW_LANGUAGES) {
+        if (userDetails.courses.length === 0) {
+            throw new Error('No languages found!');
+        }
+        content.push(formatLanguagesTable(userDetails.courses));
+    }
+
+    return content;
+}
+
+function calculateStreakStatus(streakData: StreakData) {
+    const timezone = streakData.updatedTimeZone;
 
     const now = new Date();
     const options: Intl.DateTimeFormatOptions = {
@@ -69,8 +98,8 @@ async function buildContent() {
     const formattedToday = `${parts.find(p => p.type === 'year')!.value}-${parts.find(p => p.type === 'month')!.value}-${parts.find(p => p.type === 'day')!.value}`;
 
     // Parse the last extended date and the current date in the specified timezone
-    const lastExtendedDate = new Date(userDetails.streakData.currentStreak.lastExtendedDate);
-    const currentDateInTimeZone = new Date(now.toLocaleString('en-US', { timeZone: timezone }));
+    const lastExtendedDate = new Date(streakData.currentStreak.lastExtendedDate);
+    const currentDateInTimeZone = new Date(now.toLocaleString('en-US', {timeZone: timezone}));
 
     // Calculate the difference in time
     const timeDifference = currentDateInTimeZone.getTime() - lastExtendedDate.getTime();
@@ -79,29 +108,12 @@ async function buildContent() {
     // Determine the streak status
     let streakStatus: boolean | null = null;
     if (daysDifference <= 2) {
-        streakStatus = userDetails.streakData.currentStreak.lastExtendedDate === formattedToday;
+        streakStatus = streakData.currentStreak.lastExtendedDate === formattedToday;
     } else {
         streakStatus = null; // Streak is frozen
     }
 
-    content.push(formatOverviewTable(
-        userDetails.username, 
-        userDetails.streak, 
-        streakStatus, 
-        userDetails.totalXp, 
-        (XP_THIS_WEEK && userDetails.xpGains != undefined) ? userDetails.xpGains : false, 
-        (SHOW_LEAGUE && userDetails.trackingProperties && userDetails.trackingProperties.leaderboard_league != undefined) ? userDetails.trackingProperties.leaderboard_league : false,
-        (SHOW_STREAK_TIMEZONE && userDetails.streakData && userDetails.streakData.updatedTimeZone != undefined) ? userDetails.streakData.updatedTimeZone : false)
-    );
-
-    if (SHOW_LANGUAGES) {
-        if (userDetails.courses.length === 0) {
-            throw new Error('No languages found!');
-        }
-        content.push(formatLanguagesTable(userDetails.courses));
-    }
-
-    return content;
+    return streakStatus;
 }
 
 function updateFile(content: string[]) {

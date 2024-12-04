@@ -18,18 +18,34 @@ export type Course = {
     crowns: number;
 }
 
-export type StreakInfo = {
+export type CurrentStreak = {
     endDate: string;
     length: number;
     lastExtendedDate: string;
     startDate: string;
 }
 
-export type TopStreakInfo = {
+export type PreviousStreak = {
+    endDate: string;
+    length: number;
+    lastExtendedDate: string;
+    startDate: string;
+}
+
+export type LongestStreak = {
     endDate: string;
     length: number;
     achieveDate: string;
     startDate: string;
+}
+
+export type StreakData = {
+    currentStreak: CurrentStreak;
+    previousStreak: PreviousStreak;
+    length: number;
+    xpGoal: number;
+    longestStreak: LongestStreak;
+    updatedTimeZone: string;
 }
 
 export type UserDetailsResponse = {
@@ -42,12 +58,5 @@ export type UserDetailsResponse = {
     courses: Course[];
     trackingProperties: TrackingProperties;
     xpGains: XPGain[];
-    streakData: {
-        currentStreak: StreakInfo;
-        previousStreak: StreakInfo;
-        length: number;
-        xpGoal: number;
-        longestStreak: TopStreakInfo;
-        updatedTimeZone: string;
-    }
+    streakData: StreakData;
 };

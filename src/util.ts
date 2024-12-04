@@ -116,18 +116,18 @@ const exec = (cmd: string, args: string[] = []) =>
         childProcess.on('error', reject);
     });
 
-export const formatOverviewTable = (username: string, streak: number, streakExtendedToday: boolean | null, totalXp: number, xpThisWeek: XPGain[] | false, leagueID: number | false, streakTimeZone: string | false): string => {
+export const formatOverviewTable = (username: string, streak: number, streakExtendedToday: boolean | null, totalXp: number, xpThisWeek: XPGain[], leagueID: number | null, streakTimeZone: string | null): string => {
     const leagues = ["Bronze", "Silver", "Gold", "Sapphire", "Ruby", "Emerald", "Amethyst", "Pearl", "Obsidian", "Diamond"]
-    const tableHeader = `| Username | Day Streak${SHOW_STREAK_TIMEZONE === true && streakTimeZone ? " (" + new Intl.DateTimeFormat('en-UK', { timeZone: streakTimeZone, timeZoneName: 'short' }).format(new Date()).split(", ")[1] + ")" : ""} | Total XP |${xpThisWeek === false ? "" : " XP This Week |"}${leagueID === false ? "" : " League |"}`;
+    const tableHeader = `| Username | Day Streak${SHOW_STREAK_TIMEZONE === true && streakTimeZone ? " (" + new Intl.DateTimeFormat('en-UK', { timeZone: streakTimeZone, timeZoneName: 'short' }).format(new Date()).split(", ")[1] + ")" : ""} | Total XP |${xpThisWeek.length === 0 ? "" : " XP This Week |"}${leagueID === null ? "" : " League |"}`;
     const tableSeparator =
-        '|' + Array.from({length: 3 + (leagueID === false ? 0 : 1) + (xpThisWeek === false ? 0 : 1)}, () => ':---:|').join('');
+        '|' + Array.from({length: 3 + (leagueID === null ? 0 : 1) + (xpThisWeek.length === 0 ? 0 : 1)}, () => ':---:|').join('');
     const data = [
         '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/duolingo.png" height="12"> ' + username ?? 'N/A',
         `<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/streak${streakExtendedToday == true ? 'active' : streakExtendedToday == false ? 'inactive' : 'frozen'}.svg" height="12"> ` + streak ?? 'N/A',
         '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXp ?? 'N/A'
     ];
 
-    if (xpThisWeek !== false) {
+    if (xpThisWeek.length === 0) {
         const now = new Date();
         const lastReset = new Date(now);
         lastReset.setUTCHours(0, 0, 0, 0);
@@ -140,7 +140,7 @@ export const formatOverviewTable = (username: string, streak: number, streakExte
         data.push('<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXpSinceReset ?? 'N/A');
     }
 
-    if (leagueID !== false)
+    if (leagueID !== null)
         data.push(`<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/leagues/${leagues[leagueID].toLowerCase()}.png" height="12"> ` + leagues[leagueID] ?? 'N/A');
 
     const row = `| ${data.join(' | ')} |`;
