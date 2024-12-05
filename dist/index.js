@@ -230,7 +230,7 @@ const core_1 = __nccwpck_require__(186);
 const main_1 = __nccwpck_require__(109);
 exports.START_TOKEN = '<!--START_SECTION:duolingoStats-->';
 exports.END_TOKEN = '<!--END_SECTION:duolingoStats-->';
-exports.INFO_LINE = '<!-- Automatically generated with https://github.com/RichardKanshen/duolingo-readme-stats-->\n';
+exports.INFO_LINE = '<!-- Automatically generated with https://github.com/centrumek/duolingo-readme-stats-->\n';
 exports.langsISO = {
     "en": "English",
     "ar": "Arabic",

@@ -17,12 +17,8 @@ jobs:
       - uses: actions/checkout@v3
       - uses: ./
         with:
-          DUOLINGO_USER_ID: 745993669
-          SHOW_FROM_ENGLISH: true
-          ADVANCED_TOKEN_CSRF: ${{ secrets.DUOLINGO_CSRF }}
           ADVANCED_TOKEN_JWT: ${{ secrets.DUOLINGO_JWT }}
-          SHOW_LEAGUE: true # Requires Advanced Tokens, but SHOULD NOT FAIL THE SCRIPT WITHOUT THEM - Info will just not be retrieved
-          XP_THIS_WEEK: true # Requires Advanced Tokens, but SHOULD NOT FAIL THE SCRIPT WITHOUT THEM - Info will just not be retrieved
-          SHOW_STREAK_TIMEZONE: true
+          DUOLINGO_USER_ID: 730772122
           FILE_NAME: README-DEMO-AUTH.md
-          SHOW_LANGUAGES: true
+          SHOW_LANGUAGES_FROM_ENGLISH: true
+          SHOW_STREAK_TIMEZONE: true

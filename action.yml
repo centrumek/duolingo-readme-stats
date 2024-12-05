@@ -3,10 +3,9 @@ description: 'Dynamically generated duolingo.com stats for your README.md'
 author: 'Paul Potaczala'
 
 inputs:
-  DUOLINGO_USER_ID:
-    description: 'Your duolingo.com user ID'
-    default: '730772122'
-    required: true
+  ADVANCED_TOKEN_JWT:
+    description: "Your duolingo.com JWT token to get extra info. PLEASE, ONLY PASS VIA GITHUB REPO SECRETS <3."
+    required: false
   COMMIT_EMAIL:
     description: "Email used while committing to the repo"
     default: "41898282+github-actions[bot]@users.noreply.github.com"
@@ -19,30 +18,28 @@ inputs:
     description: "Username used while committing to the repo"
     default: "duolingo-stats-bot"
     required: false
+  DUOLINGO_USER_ID:
+    description: 'Your duolingo.com user ID'
+    default: '730772122'
+    required: true
   FILE_NAME:
     description: "Define a specific file in your repo"
     default: "README.md"
     required: false
+  SHOW_ADVANCED_LEAGUE:
+    description: "Show the user's league in the overview table. Requires ADVANCED_TOKEN_JWT."
+    default: "true"
+    required: false
+  SHOW_ADVANCED_XP_THIS_WEEK:
+    description: "Show the user's XP earned since last leaderboard reset. Requires ADVANCED_TOKEN_JWT."
+    default: "true"
+    required: false
   SHOW_LANGUAGES:
-    description: "Toggle the languages table"
+    description: "Toggle the languages table."
     default: "true"
     required: false
-  SHOW_FROM_ENGLISH:
-    description: "Determines, whether \" (from English)\" should be appended to languages learnt from English, similarly to learning from other languages"
-    default: "false"
-    required: false
-  ADVANCED_TOKEN_CSRF:
-    description: "Set the Duolingo's CSRF cookie, this is needed for leagues. PLEASE, USE GITHUB REPOSITORY SECRETS <3"
-    required: false
-  ADVANCED_TOKEN_JWT:
-    description: "Set the Duolingo's JWT cookie, this is needed for leagues PLEASE, USE GITHUB REPOSITORY SECRET <3"
-    required: false
-  SHOW_LEAGUE:
-    description: "Set, whether the user table should show the current league. Requires Duolingo cookies to be passed using ADVANCED_TOKEN_CSRF AND ADVANCED_TOKEN_JWT."
-    default: "true"
-    required: false
-  XP_THIS_WEEK:
-    description: "Determines, whether the overview table should include XP gained since last leaderboard reset. Requires Duolingo cookies to be passed using ADVANCED_TOKEN_CSRF AND ADVANCED_TOKEN_JWT."
+  SHOW_LANGUAGES_FROM_ENGLISH:
+    description: "Determines, whether \" (from English)\" should be appended to languages learnt from English, similarly to learning from other languages. This setting works only if SHOW_LANGUAGES is enabled."
     default: "false"
     required: false
   SHOW_STREAK_TIMEZONE:

@@ -13,18 +13,18 @@ import {StreakData, UserDetailsResponse} from "./types";
 import {getInput} from "@actions/core";
 
 // Public parameters
+export const ADVANCED_TOKEN_JWT = getInput('ADVANCED_TOKEN_JWT');
 export const COMMIT_EMAIL = getInput('COMMIT_MSG');
 export const COMMIT_MSG = getInput('COMMIT_MSG');
 export const COMMIT_USERNAME = getInput('COMMIT_MSG');
 export const DUOLINGO_USER_ID = getInput('DUOLINGO_USER_ID');
 export const FILE_NAME = getInput('FILE_NAME');
 export const IS_DEBUG = getInput('IS_DEBUG').toLowerCase() === 'true';
-export const JWT_TOKEN = getInput('ADVANCED_TOKEN_JWT');
-export const SHOW_FROM_ENGLISH = getInput('SHOW_FROM_ENGLISH').toLowerCase() === 'true';
+export const SHOW_ADVANCED_LEAGUE = getInput('SHOW_ADVANCED_LEAGUE').toLowerCase() === 'true';
+export const SHOW_ADVANCED_XP_THIS_WEEK = getInput('SHOW_ADVANCED_XP_THIS_WEEK').toLowerCase() === 'true';
 export const SHOW_LANGUAGES = getInput('SHOW_LANGUAGES').toLowerCase() === 'true';
-export const SHOW_LEAGUE = getInput('SHOW_LEAGUE').toLowerCase() === 'true';
+export const SHOW_LANGUAGES_FROM_ENGLISH = getInput('SHOW_LANGUAGES_FROM_ENGLISH').toLowerCase() === 'true';
 export const SHOW_STREAK_TIMEZONE = getInput('SHOW_STREAK_TIMEZONE').toLowerCase() === 'true';
-export const SHOW_XP_THIS_WEEK = getInput('SHOW_XP_THIS_WEEK').toLowerCase() === 'true';
 
 (async () => {
     try {
@@ -48,15 +48,15 @@ export const SHOW_XP_THIS_WEEK = getInput('SHOW_XP_THIS_WEEK').toLowerCase() ===
 async function buildContent() {
     const content: string[] = [];
 
-    const userDetails: UserDetailsResponse = await getUserDetails(DUOLINGO_USER_ID, JWT_TOKEN);
+    const userDetails: UserDetailsResponse = await getUserDetails(DUOLINGO_USER_ID, ADVANCED_TOKEN_JWT);
 
-    if(SHOW_XP_THIS_WEEK && userDetails.xpGains == undefined) {
+    if(SHOW_ADVANCED_XP_THIS_WEEK && userDetails.xpGains == undefined) {
         throw new Error('No languages found!');
     }
 
     let streakStatus = calculateStreakStatus(userDetails.streakData)
-    let xpThisWeek = (SHOW_XP_THIS_WEEK && userDetails.xpGains != undefined) ? userDetails.xpGains : [];
-    let leagueId = (SHOW_LEAGUE && userDetails.trackingProperties && userDetails.trackingProperties.leaderboard_league != undefined)
+    let xpThisWeek = (SHOW_ADVANCED_XP_THIS_WEEK && userDetails.xpGains != undefined) ? userDetails.xpGains : [];
+    let leagueId = (SHOW_ADVANCED_LEAGUE && userDetails.trackingProperties && userDetails.trackingProperties.leaderboard_league != undefined)
         ? userDetails.trackingProperties.leaderboard_league : null
     let streakTimeZone = (SHOW_STREAK_TIMEZONE && userDetails.streakData && userDetails.streakData.updatedTimeZone != undefined) ? userDetails.streakData.updatedTimeZone : null;
 
