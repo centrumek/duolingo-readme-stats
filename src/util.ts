@@ -1,11 +1,11 @@
 import {Course,XPGain} from "./types";
 import {spawn} from "node:child_process";
 import {setFailed} from "@actions/core";
-import {SHOW_LANGUAGES_FROM_ENGLISH, SHOW_STREAK_TIMEZONE} from "./main";
+import { SHOW_FROM_ENGLISH, SHOW_STREAK_TIMEZONE } from "./main";
 
 export const START_TOKEN = '<!--START_SECTION:duolingoStats-->';
 export const END_TOKEN = '<!--END_SECTION:duolingoStats-->';
-export const INFO_LINE = '<!-- Automatically generated with https://github.com/RichardKanshen/duolingo-readme-stats-->\n';
+export const INFO_LINE = '<!-- Automatically generated with https://github.com/centrumek/duolingo-readme-stats-->\n';
 
 export const langsISO: { [key: string]: string } = {
     "en": "English",
@@ -82,7 +82,7 @@ export const courseFlags: { [key: string]: string } = {
 };
 
 export function getEmoji(title: string) {
-    const string = `<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/langs/${courseFlags[title]}" height="12">`;
+    const string = `<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/langs/${courseFlags[title]}" height="12">`;
     return string;
 }
 
@@ -122,12 +122,12 @@ export const formatOverviewTable = (username: string, streak: number, streakExte
     const tableSeparator =
         '|' + Array.from({length: 3 + (leagueID === null ? 0 : 1) + (xpThisWeek.length === 0 ? 0 : 1)}, () => ':---:|').join('');
     const data = [
-        '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/duolingo.png" height="12"> ' + username ?? 'N/A',
-        `<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/streak${streakExtendedToday == true ? 'active' : streakExtendedToday == false ? 'inactive' : 'frozen'}.svg" height="12"> ` + streak ?? 'N/A',
-        '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXp ?? 'N/A'
+        '<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/duolingo.png" height="12"> ' + username ?? 'N/A',
+        `<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/streak${streakExtendedToday == true ? 'active' : streakExtendedToday == false ? 'inactive' : 'frozen'}.svg" height="12"> ` + streak ?? 'N/A',
+        '<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXp ?? 'N/A'
     ];
 
-    if (xpThisWeek.length !== 0) {
+    if (xpThisWeek.length === 0) {
         const now = new Date();
         const lastReset = new Date(now);
         lastReset.setUTCHours(0, 0, 0, 0);
@@ -137,11 +137,11 @@ export const formatOverviewTable = (username: string, streak: number, streakExte
         const lastResetTimestamp = Math.floor(lastReset.getTime() / 1000);
         const recentXpGains = xpThisWeek.filter(gain => gain.time > lastResetTimestamp);
         const totalXpSinceReset = recentXpGains.reduce((total, gain) => total + gain.xp, 0);
-        data.push('<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXpSinceReset ?? 'N/A');
+        data.push('<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXpSinceReset ?? 'N/A');
     }
 
     if (leagueID !== null)
-        data.push(`<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/leagues/${leagues[leagueID].toLowerCase()}.png" height="12"> ` + leagues[leagueID] ?? 'N/A');
+        data.push(`<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/leagues/${leagues[leagueID].toLowerCase()}.png" height="12"> ` + leagues[leagueID] ?? 'N/A');
 
     const row = `| ${data.join(' | ')} |`;
 
@@ -156,8 +156,8 @@ export const formatLanguagesTable = (courses: Course[]): string => {
 
     const rows = courses.map(course => {
         const data = [
-            getEmoji(course.title) + ' ' + course.title + (course.fromLanguage == "en" ? SHOW_LANGUAGES_FROM_ENGLISH ? ` (from ${getEmoji("English")} English)` : "" : ` (from ${getEmoji(langsISO[course.fromLanguage])} ${langsISO[course.fromLanguage]})`),
-            '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + course.xp
+            getEmoji(course.title) + ' ' + course.title + (course.fromLanguage == "en" ? SHOW_FROM_ENGLISH ? ` (from ${getEmoji("English")} English)` : "" : ` (from ${getEmoji(langsISO[course.fromLanguage])} ${langsISO[course.fromLanguage]})`),
+            '<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + course.xp
         ];
         return `| ${data.join(' | ')} |`;
     }).join('\n');
