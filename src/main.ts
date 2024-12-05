@@ -50,10 +50,6 @@ async function buildContent() {
 
     const userDetails: UserDetailsResponse = await getUserDetails(DUOLINGO_USER_ID, ADVANCED_TOKEN_JWT);
 
-    if(SHOW_ADVANCED_XP_THIS_WEEK && userDetails.xpGains == undefined) {
-        throw new Error('No languages found!');
-    }
-
     let streakStatus = calculateStreakStatus(userDetails.streakData)
     let xpThisWeek = (SHOW_ADVANCED_XP_THIS_WEEK && userDetails.xpGains != undefined) ? userDetails.xpGains : [];
     let leagueId = (SHOW_ADVANCED_LEAGUE && userDetails.trackingProperties && userDetails.trackingProperties.leaderboard_league != undefined)
