@@ -2,17 +2,18 @@
 
 Automatically add and keep up to date your latest stats from [duolingo.com](https://www.duolingo.com/).
 
-[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/RichardKanshen/duolingo-readme-stats/duolingo-test-noauth.yml?style=flat-square&label=Duolingo%20Stats%20-%20Unauthenticated)](https://github.com/RichardKanshen/duolingo-readme-stats/blob/main/README-DEMO-NOAUTH.md) [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/RichardKanshen/duolingo-readme-stats/duolingo-test-auth.yml?style=flat-square&label=Duolingo%20Stats%20-%20Authenticated)](https://github.com/RichardKanshen/duolingo-readme-stats/blob/main/README-DEMO-AUTH.md)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/centrumek/duolingo-readme-stats/duolingo-test-noauth.yml?style=flat-square&label=Duolingo%20Stats%20-%20Unauthenticated)](https://github.com/centrumek/duolingo-readme-stats/blob/main/README-DEMO-NOAUTH.md)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/centrumek/duolingo-readme-stats/duolingo-test-auth.yml?style=flat-square&label=Duolingo%20Stats%20-%20Authenticated)](https://github.com/centrumek/duolingo-readme-stats/blob/main/README-DEMO-AUTH.md)
 
-| Username | Day Streak | Total XP |
-|:---:|:---:|:---:|
-| <img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/duolingo.png" height="12"> Centrumek | <img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/streakinactive.svg" height="12"> 498 | <img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> 28588 |
+|                                                           Username                                                           |                                                       Day Streak (WET)                                                       |                                                      Total XP                                                      |                                                  XP This Week                                                   |                                                             League                                                              |
+|:----------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------:|
+| <img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/duolingo.png" height="12"> Centrumek | <img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/streakinactive.svg" height="12"> 616 | <img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/xp.svg" height="12"> 29590 | <img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/xp.svg" height="12"> 13 | <img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/leagues/silver.png" height="12"> Silver |
 
-| Language | XP |
-|:---:|:---:|
-| <img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/langs/ukrainian.svg" height="12"> Ukrainian | <img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> 12488 |
-| <img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/langs/spanish.svg" height="12"> Spanish | <img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> 10746 |
-| <img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/langs/japanese.svg" height="12"> Japanese | <img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> 5354 |
+|                                                                                                                                  Language                                                                                                                                  |                                                         XP                                                         |
+|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------:|
+| <img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/langs/ukrainian.svg" height="12"> Ukrainian (from <img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/langs/english.svg" height="12"> English) | <img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/xp.svg" height="12"> 13342 |
+|   <img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/langs/spanish.svg" height="12"> Spanish (from <img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/langs/english.svg" height="12"> English)   | <img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/xp.svg" height="12"> 10887 |
+|  <img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/langs/japanese.svg" height="12"> Japanese (from <img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/langs/english.svg" height="12"> English)  | <img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/xp.svg" height="12"> 5354  |
 
 ## Usage
 
@@ -32,7 +33,6 @@ name: Duolingo README Stats Action
 on:
   schedule:
     - cron: '0 0 * * *' # Runs at 00:00 UTC every day
-    - cron: '0 22 * * *' # Runs at 00:00 CET every day - updates streak, change 22 to your timezone's midnight in UTC
   workflow_dispatch:
 
 jobs:
@@ -46,7 +46,7 @@ jobs:
       - uses: centrumek/duolingo-readme-stats@main
         with:
           DUOLINGO_USER_ID: <Your duolingo.com user ID>
-          SHOW_FROM_ENGLISH: <true/false>
+          ADVANCED_TOKEN_JWT: <Your duolingo.com JWT token>
 ```
 
 `DUOLINGO_USER_ID` variable can be found in browser DevTools [Fn + F12]
@@ -55,21 +55,25 @@ jobs:
   e.g. `duo.appLogo` > `{"730772122":{"canShowLogoDot":true}}`.
 - `Network` > `Fetch/XHR` > e.g. `https://zombie.duolingo.com/22/web.json?user=730772122`.
 
-`SHOW_FROM_ENGLISH` determines, whether "(from English)" should be appended to languages learnt from English, similarly to learning from other languages.
+`ADVANCED_TOKEN_JWT` variable can be found in browser DevTools [Fn + F12]
+
+- `Application` > `Cookie` > `https://www.duolingo.com/` > `jwt_token` >
+  `XYZjixuishudissuigfiu....`.
 
 ## Configuration
 
 There are a few configuration options you can use in your GitHub Action.
 
-|     Parameter      |                                                                                 Description                                                                                 |                        Default                        | Required |
-|:------------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------:|:--------:|
-|  DUOLINGO_USER_ID  |                                                                          Your duolingo.com user ID                                                                          |                       730772122                       | **Yes**  |
-|    COMMIT_EMAIL    |                                                                   Email used while committing to the repo                                                                   | 41898282+github-actions[bot]@users.noreply.github.com |    No    |
-|     COMMIT_MSG     |                                                              Commit message used while committing to the repo                                                               |      💬 Updated README with your duolingo stats       |    No    |
-|  COMMIT_USERNAME   |                                                                 Username used while committing to the repo                                                                  |                  duolingo-stats-bot                   |    No    |
-|     FILE_NAME      |                                                                     Define a specific file in your repo                                                                     |                       README.md                       |    No    |
-|   SHOW_LANGUAGES   |                                                                         Toggle the languages table                                                                          |                         true                          |    No    |
-| SHOW_FROM_ENGLISH  |                                          Determines, whether "(from English)" should be appended to languages learnt from English                                           | false | No |
-| ADVANCED_TOKEN_JWT |                                        One of the cookies necessary to get league info. PLEASE, ONLY PASS VIA GITHUB REPO SECRETS <3                                        | none | *For certain functions* |
-|    SHOW_LEAGUE*    |      Show the user's league in the overview table. *Requires **ADVANCED_TOKEN_JWT**.* If you use this, I recommend you to add `- cron: '0 0 * * 1'` to the scheduling.      | true | No |
-| SHOW_XP_THIS_WEEK* | Show the user's XP earned since last leaderboard reset. *Requires **ADVANCED_TOKEN_JWT**.* If you use this, I recommend you to add `- cron: '0 0 * * 1'` to the scheduling. | false | No
+|          Parameter          |                                                                                           Description                                                                                           |                        Default                        |        Required         |
+|:---------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------:|:-----------------------:|
+|     ADVANCED_TOKEN_JWT      |                                                  Your duolingo.com JWT token to get extra info. PLEASE, ONLY PASS VIA GITHUB REPO SECRETS <3.                                                   |                         none                          | *For certain functions* |
+|        COMMIT_EMAIL         |                                                                            Email used while committing to the repo.                                                                             | 41898282+github-actions[bot]@users.noreply.github.com |           No            |
+|         COMMIT_MSG          |                                                                        Commit message used while committing to the repo.                                                                        |      💬 Updated README with your duolingo stats       |           No            |
+|       COMMIT_USERNAME       |                                                                           Username used while committing to the repo.                                                                           |                  duolingo-stats-bot                   |           No            |
+|      DUOLINGO_USER_ID       |                                                                                   Your duolingo.com user ID.                                                                                    |                       730772122                       |         **Yes**         |
+|          FILE_NAME          |                                                                              Define a specific file in your repo.                                                                               |                       README.md                       |           No            |
+|    SHOW_ADVANCED_LEAGUE*    |                                                        Show the user's league in the overview table. *Requires **ADVANCED_TOKEN_JWT**.*                                                         |                         true                          |           No            |
+| SHOW_ADVANCED_XP_THIS_WEEK* |                                                   Show the user's XP earned since last leaderboard reset. *Requires **ADVANCED_TOKEN_JWT**.*                                                    |                         true                          |           No            
+|       SHOW_LANGUAGES        |                                                                                   Toggle the languages table.                                                                                   |                         true                          |           No            |
+| SHOW_LANGUAGES_FROM_ENGLISH | Determines, whether "(from English)" should be appended to languages learnt from English, similarly to learning from other languages. This setting works only if **SHOW_LANGUAGES** is enabled. |                         false                         |           No            |
+|    SHOW_STREAK_TIMEZONE     |                                                    Set, whether the 'Day Streak' section should include the timezone streak is measured in.                                                     |                         false                         |           No            |

@@ -1,7 +1,7 @@
 import {Course,XPGain} from "./types";
 import {spawn} from "node:child_process";
 import {setFailed} from "@actions/core";
-import { SHOW_FROM_ENGLISH, SHOW_STREAK_TIMEZONE } from "./main";
+import { SHOW_LANGUAGES_FROM_ENGLISH, SHOW_STREAK_TIMEZONE } from "./main";
 
 export const START_TOKEN = '<!--START_SECTION:duolingoStats-->';
 export const END_TOKEN = '<!--END_SECTION:duolingoStats-->';
@@ -127,7 +127,7 @@ export const formatOverviewTable = (username: string, streak: number, streakExte
         '<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXp ?? 'N/A'
     ];
 
-    if (xpThisWeek.length === 0) {
+    if (xpThisWeek.length !== 0) {
         const now = new Date();
         const lastReset = new Date(now);
         lastReset.setUTCHours(0, 0, 0, 0);
@@ -156,7 +156,7 @@ export const formatLanguagesTable = (courses: Course[]): string => {
 
     const rows = courses.map(course => {
         const data = [
-            getEmoji(course.title) + ' ' + course.title + (course.fromLanguage == "en" ? SHOW_FROM_ENGLISH ? ` (from ${getEmoji("English")} English)` : "" : ` (from ${getEmoji(langsISO[course.fromLanguage])} ${langsISO[course.fromLanguage]})`),
+            getEmoji(course.title) + ' ' + course.title + (course.fromLanguage == "en" ? SHOW_LANGUAGES_FROM_ENGLISH ? ` (from ${getEmoji("English")} English)` : "" : ` (from ${getEmoji(langsISO[course.fromLanguage])} ${langsISO[course.fromLanguage]})`),
             '<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + course.xp
         ];
         return `| ${data.join(' | ')} |`;
