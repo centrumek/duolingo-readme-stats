@@ -1,7 +1,7 @@
-import {Course,XPGain} from "./types";
+import {Course, XPGain} from "./types";
 import {spawn} from "node:child_process";
 import {setFailed} from "@actions/core";
-import { SHOW_LANGUAGES_FROM_ENGLISH, SHOW_STREAK_TIMEZONE } from "./main";
+import {SHOW_LANGUAGES_FROM_ENGLISH, SHOW_STREAK_TIMEZONE} from "./main";
 
 export const START_TOKEN = '<!--START_SECTION:duolingoStats-->';
 export const END_TOKEN = '<!--END_SECTION:duolingoStats-->';
@@ -82,8 +82,7 @@ export const courseFlags: { [key: string]: string } = {
 };
 
 export function getEmoji(title: string) {
-    const string = `<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/langs/${courseFlags[title]}" height="12">`;
-    return string;
+    return `<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/langs/${courseFlags[title]}" height="12">`;
 }
 
 export const commitFile = async (filename: string, message: string, username: string, email: string) => {
