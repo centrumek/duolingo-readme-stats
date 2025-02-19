@@ -127,7 +127,7 @@ export const formatOverviewTable = (username: string, streak: number, streakExte
         '<img src="https://raw.githubusercontent.com/RichardKanshen/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXp ?? 'N/A'
     ];
 
-    if (xpThisWeek.length === 0) {
+    if (xpThisWeek.length !== 0) {
         const now = new Date();
         const lastReset = new Date(now);
         lastReset.setUTCHours(0, 0, 0, 0);
