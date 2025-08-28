@@ -20,11 +20,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getUserDetails = void 0;
-const fetch_1 = __importDefault(__nccwpck_require__(2387));
+const https_1 = __importDefault(__nccwpck_require__(5687));
 const getUserDetails = (userId, jwt) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield (0, fetch_1.default)(`/2017-06-30/users/` + userId + `?fields=id,username,creationDate,streak,inviteURL,totalXp,courses,trackingProperties,xpGains,streakData`, jwt);
+    return yield fetch(`/2017-06-30/users/` + userId + `?fields=id,username,creationDate,streak,inviteURL,totalXp,courses,trackingProperties,xpGains,streakData`, jwt);
 });
 exports.getUserDetails = getUserDetails;
+function fetch(path, jwt) {
+    return new Promise((response, reject) => {
+        https_1.default.get({
+            host: 'www.duolingo.com',
+            path: path,
+            headers: {
+                'Content-Type': 'application/json',
+                'User-Agent': 'duolingo-readme-stats',
+                'Cookie': `jwt_token=${jwt}`
+            }
+        }, callback => {
+            let data = '';
+            callback.on('data', chunk => (data += chunk));
+            callback.on('end', () => response(JSON.parse(data)));
+            callback.on('error', error => reject(error));
+        });
+    });
+}
 
 
 /***/ }),
@@ -80,39 +98,6 @@ exports.getConfiguration = getConfiguration;
 
 /***/ }),
 
-/***/ 2387:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const https_1 = __importDefault(__nccwpck_require__(5687));
-function fetch(path, jwt) {
-    return new Promise((response, reject) => {
-        https_1.default.get({
-            host: 'www.duolingo.com',
-            path: path,
-            headers: {
-                'Content-Type': 'application/json',
-                'User-Agent': 'duolingo-readme-stats',
-                'Cookie': `jwt_token=${jwt}`
-            }
-        }, callback => {
-            let data = '';
-            callback.on('data', chunk => (data += chunk));
-            callback.on('end', () => response(JSON.parse(data)));
-            callback.on('error', error => reject(error));
-        });
-    });
-}
-exports["default"] = fetch;
-
-
-/***/ }),
-
 /***/ 3109:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -130,24 +115,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const api_1 = __nccwpck_require__(8947);
 const configuration_1 = __nccwpck_require__(5527);
-const util_1 = __nccwpck_require__(4024);
+const utils_1 = __nccwpck_require__(918);
+const tableUtils_1 = __nccwpck_require__(9906);
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const configuration = (0, configuration_1.getConfiguration)();
         const fileName = configuration.file.name;
         const fileContent = yield buildContent();
-        (0, util_1.updateFile)(fileName, fileContent);
+        (0, utils_1.updateFile)(fileName, fileContent);
         if (!configuration.flags.isDebug) {
             const commitMsg = configuration.commit.message;
             const commitUsername = configuration.commit.username;
             const commitEmail = configuration.commit.email;
-            yield (0, util_1.commitFile)(fileName, commitMsg, commitUsername, commitEmail);
+            yield (0, utils_1.commitFile)(fileName, commitMsg, commitUsername, commitEmail);
         }
         console.log(`Successfully updated the '${fileName}' file!`);
     }
     catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'The action failed with an Unknown error';
-        (0, util_1.setFailure)(errorMessage);
+        const errorMessage = error instanceof Error
+            ? error.message
+            : 'The action failed with an Unknown error';
+        (0, utils_1.setFailure)(errorMessage);
     }
 }))();
 function buildContent(configuration = (0, configuration_1.getConfiguration)()) {
@@ -169,12 +157,12 @@ function buildContent(configuration = (0, configuration_1.getConfiguration)()) {
             userDetails.streakData.updatedTimeZone != undefined
             ? userDetails.streakData.updatedTimeZone
             : null;
-        content.push((0, util_1.formatOverviewTable)(userDetails.username, userDetails.streak, streakStatus, userDetails.totalXp, xpThisWeek, leagueId, streakTimeZone));
+        content.push((0, tableUtils_1.formatOverviewTable)(userDetails.username, userDetails.streak, streakStatus, userDetails.totalXp, xpThisWeek, leagueId, streakTimeZone));
         if (configuration.flags.showLanguages) {
             if (userDetails.courses.length === 0) {
                 throw new Error('No languages found!');
             }
-            content.push((0, util_1.formatLanguagesTable)(userDetails.courses));
+            content.push((0, tableUtils_1.formatLanguagesTable)(userDetails.courses));
         }
         return content;
     });
@@ -214,7 +202,64 @@ function calculateStreakStatus(streakData) {
 
 /***/ }),
 
-/***/ 4024:
+/***/ 9906:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.formatLanguagesTable = exports.formatOverviewTable = void 0;
+const configuration_1 = __nccwpck_require__(5527);
+const utils_1 = __nccwpck_require__(918);
+const formatOverviewTable = (username, streak, streakExtendedToday, totalXp, xpThisWeek, leagueID, streakTimeZone) => {
+    var _a, _b, _c, _d, _e;
+    const configuration = (0, configuration_1.getConfiguration)();
+    const leagues = ["Bronze", "Silver", "Gold", "Sapphire", "Ruby", "Emerald", "Amethyst", "Pearl", "Obsidian", "Diamond"];
+    const tableHeader = `| Username | Day Streak${configuration.flags.showStreakTimezone && streakTimeZone ? " (" + new Intl.DateTimeFormat('en-UK', { timeZone: streakTimeZone, timeZoneName: 'short' }).format(new Date()).split(", ")[1] + ")" : ""} | Total XP |${xpThisWeek.length === 0 ? "" : " XP This Week |"}${leagueID === null ? "" : " League |"}`;
+    const tableSeparator = '|' + Array.from({ length: 3 + (leagueID === null ? 0 : 1) + (xpThisWeek.length === 0 ? 0 : 1) }, () => ':---:|').join('');
+    const data = [
+        (_a = '<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/duolingo.png" height="12"> ' + username) !== null && _a !== void 0 ? _a : 'N/A',
+        (_b = `<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/streak${streakExtendedToday == true ? 'active' : streakExtendedToday == false ? 'inactive' : 'frozen'}.svg" height="12"> ` + streak) !== null && _b !== void 0 ? _b : 'N/A',
+        (_c = '<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXp) !== null && _c !== void 0 ? _c : 'N/A'
+    ];
+    if (xpThisWeek.length !== 0) {
+        const now = new Date();
+        const lastReset = new Date(now);
+        lastReset.setUTCHours(0, 0, 0, 0);
+        const dayOfWeek = lastReset.getUTCDay();
+        const daysSinceReset = (dayOfWeek + 6) % 7;
+        lastReset.setUTCDate(now.getUTCDate() - daysSinceReset);
+        const lastResetTimestamp = Math.floor(lastReset.getTime() / 1000);
+        const recentXpGains = xpThisWeek.filter(gain => gain.time > lastResetTimestamp);
+        const totalXpSinceReset = recentXpGains.reduce((total, gain) => total + gain.xp, 0);
+        data.push((_d = '<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + totalXpSinceReset) !== null && _d !== void 0 ? _d : 'N/A');
+    }
+    if (leagueID !== null)
+        data.push((_e = `<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/leagues/${leagues[leagueID].toLowerCase()}.png" height="12"> ` + leagues[leagueID]) !== null && _e !== void 0 ? _e : 'N/A');
+    const row = `| ${data.join(' | ')} |`;
+    return `${tableHeader}\n${tableSeparator}\n${row}\n`;
+};
+exports.formatOverviewTable = formatOverviewTable;
+const formatLanguagesTable = (courses) => {
+    courses.sort((a, b) => b.xp - a.xp);
+    const tableHeader = `| Language | XP |`;
+    const tableSeparator = '|' + Array.from({ length: 2 }, () => ':---:|').join('');
+    const configuration = (0, configuration_1.getConfiguration)();
+    const rows = courses.map(course => {
+        const data = [
+            (0, utils_1.getEmoji)(course.title) + ' ' + course.title + (course.fromLanguage == "en" ? configuration.flags.showLanguagesFromEnglish ? ` (from ${(0, utils_1.getEmoji)("English")} English)` : "" : ` (from ${(0, utils_1.getEmoji)(utils_1.langsISO[course.fromLanguage])} ${utils_1.langsISO[course.fromLanguage]})`),
+            '<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' + course.xp
+        ];
+        return `| ${data.join(' | ')} |`;
+    }).join('\n');
+    return `${tableHeader}\n${tableSeparator}\n${rows}\n`;
+};
+exports.formatLanguagesTable = formatLanguagesTable;
+
+
+/***/ }),
+
+/***/ 918:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -232,11 +277,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.setFailure = exports.formatLanguagesTable = exports.formatOverviewTable = exports.commitFile = exports.updateFile = exports.getEmoji = exports.courseFlags = exports.langsISO = exports.INFO_LINE = exports.END_TOKEN = exports.START_TOKEN = void 0;
+exports.setFailure = exports.commitFile = exports.updateFile = exports.getEmoji = exports.courseFlags = exports.langsISO = exports.INFO_LINE = exports.END_TOKEN = exports.START_TOKEN = void 0;
 const node_child_process_1 = __nccwpck_require__(7718);
 const core_1 = __nccwpck_require__(2186);
 const fs_1 = __importDefault(__nccwpck_require__(7147));
-const configuration_1 = __nccwpck_require__(5527);
 exports.START_TOKEN = '<!--START_SECTION:duolingoStats-->';
 exports.END_TOKEN = '<!--END_SECTION:duolingoStats-->';
 exports.INFO_LINE = '<!-- Automatically generated with https://github.com/centrumek/duolingo-readme-stats-->\n';
@@ -313,7 +357,7 @@ exports.courseFlags = {
     Zulu: 'zulu.svg'
 };
 function getEmoji(title) {
-    if (!exports.courseFlags[title])
+    if (!(title in exports.courseFlags))
         return '';
     return `<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/langs/${exports.courseFlags[title]}" height="12">`;
 }
@@ -335,8 +379,8 @@ function updateFile(name, content) {
 }
 exports.updateFile = updateFile;
 const commitFile = (filename, message, username, email) => __awaiter(void 0, void 0, void 0, function* () {
-    yield exec('git', ['configuration', '--global', 'user.email', email]);
-    yield exec('git', ['configuration', '--global', 'user.name', username]);
+    yield exec('git', ['config', '--global', 'user.email', email]);
+    yield exec('git', ['config', '--global', 'user.name', username]);
     yield exec('git', ['add', filename]);
     yield exec('git', ['commit', '-m', message]);
     yield exec('git', ['push']);
@@ -357,88 +401,6 @@ const exec = (cmd, args = []) => new Promise((resolve, reject) => {
     });
     childProcess.on('error', reject);
 });
-const formatOverviewTable = (username, streak, streakExtendedToday, totalXp, xpThisWeek, leagueID, streakTimeZone) => {
-    var _a, _b, _c, _d, _e;
-    const leagues = [
-        'Bronze',
-        'Silver',
-        'Gold',
-        'Sapphire',
-        'Ruby',
-        'Emerald',
-        'Amethyst',
-        'Pearl',
-        'Obsidian',
-        'Diamond'
-    ];
-    const tableHeader = `| Username | Day Streak${(0, configuration_1.getConfiguration)().flags.showStreakTimezone === true && streakTimeZone
-        ? ' (' +
-            new Intl.DateTimeFormat('en-UK', {
-                timeZone: streakTimeZone,
-                timeZoneName: 'short'
-            })
-                .format(new Date())
-                .split(', ')[1] +
-            ')'
-        : ''} | Total XP |${xpThisWeek.length === 0 ? '' : ' XP This Week |'}${leagueID === null ? '' : ' League |'}`;
-    const tableSeparator = '|' +
-        Array.from({
-            length: 3 + (leagueID === null ? 0 : 1) + (xpThisWeek.length === 0 ? 0 : 1)
-        }, () => ':---:|').join('');
-    const data = [
-        (_a = '<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/duolingo.png" height="12"> ' +
-            username) !== null && _a !== void 0 ? _a : 'N/A',
-        (_b = `<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/streak${streakExtendedToday == true
-            ? 'active'
-            : streakExtendedToday == false
-                ? 'inactive'
-                : 'frozen'}.svg" height="12"> ` + streak) !== null && _b !== void 0 ? _b : 'N/A',
-        (_c = '<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' +
-            totalXp) !== null && _c !== void 0 ? _c : 'N/A'
-    ];
-    if (xpThisWeek.length !== 0) {
-        const now = new Date();
-        const lastReset = new Date(now);
-        lastReset.setUTCHours(0, 0, 0, 0);
-        const dayOfWeek = lastReset.getUTCDay();
-        const daysSinceReset = (dayOfWeek + 6) % 7;
-        lastReset.setUTCDate(now.getUTCDate() - daysSinceReset);
-        const lastResetTimestamp = Math.floor(lastReset.getTime() / 1000);
-        const recentXpGains = xpThisWeek.filter(gain => gain.time > lastResetTimestamp);
-        const totalXpSinceReset = recentXpGains.reduce((total, gain) => total + gain.xp, 0);
-        data.push((_d = '<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' +
-            totalXpSinceReset) !== null && _d !== void 0 ? _d : 'N/A');
-    }
-    if (leagueID !== null)
-        data.push((_e = `<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/leagues/${leagues[leagueID].toLowerCase()}.png" height="12"> ` + leagues[leagueID]) !== null && _e !== void 0 ? _e : 'N/A');
-    const row = `| ${data.join(' | ')} |`;
-    return `${tableHeader}\n${tableSeparator}\n${row}\n`;
-};
-exports.formatOverviewTable = formatOverviewTable;
-const formatLanguagesTable = (courses) => {
-    courses.sort((a, b) => b.xp - a.xp);
-    const tableHeader = `| Language | XP |`;
-    const tableSeparator = '|' + Array.from({ length: 2 }, () => ':---:|').join('');
-    const rows = courses
-        .map(course => {
-        const data = [
-            getEmoji(course.title) +
-                ' ' +
-                course.title +
-                (course.fromLanguage == 'en'
-                    ? (0, configuration_1.getConfiguration)().flags.showLanguagesFromEnglish
-                        ? ` (from ${getEmoji('English')} English)`
-                        : ''
-                    : ` (from ${getEmoji(exports.langsISO[course.fromLanguage])} ${exports.langsISO[course.fromLanguage]})`),
-            '<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/xp.svg" height="12"> ' +
-                course.xp
-        ];
-        return `| ${data.join(' | ')} |`;
-    })
-        .join('\n');
-    return `${tableHeader}\n${tableSeparator}\n${rows}\n`;
-};
-exports.formatLanguagesTable = formatLanguagesTable;
 const setFailure = (error) => {
     console.error(error);
     (0, core_1.setFailed)(error);
