@@ -1,13 +1,8 @@
 import { getUserDetails } from './api';
 import { StreakData, UserDetailsResponse } from './types';
 import { getConfiguration } from './configuration';
-import {
-  commitFile,
-  formatLanguagesTable,
-  formatOverviewTable,
-  setFailure,
-  updateFile
-} from './utils';
+import { commitFile, setFailure, updateFile } from './utils';
+import { formatLanguagesTable, formatOverviewTable } from './tableUtils';
 
 (async () => {
   try {
@@ -23,12 +18,17 @@ import {
     }
     console.log(`Successfully updated the '${fileName}' file!`);
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'The action failed with an Unknown error';
+    const errorMessage =
+      error instanceof Error
+        ? error.message
+        : 'The action failed with an Unknown error';
     setFailure(errorMessage);
   }
 })();
 
-async function buildContent(configuration: ReturnType<typeof getConfiguration> = getConfiguration()): Promise<string[]> {
+async function buildContent(
+  configuration: ReturnType<typeof getConfiguration> = getConfiguration()
+): Promise<string[]> {
   const content: string[] = [];
 
   const userDetails: UserDetailsResponse = await getUserDetails(
