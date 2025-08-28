@@ -18,7 +18,7 @@ function defaultBooleanInput(name: string, defaultValue = false): boolean {
   return val.toLowerCase() === 'true';
 }
 
-export const configuration = {
+export const getConfiguration = () => ({
   auth: {
     advancedTokenJwt: defaultInput('ADVANCED_TOKEN_JWT', ''),
     duolingoUserId: requiredInput('DUOLINGO_USER_ID'),
@@ -39,4 +39,4 @@ export const configuration = {
     showLanguagesFromEnglish: defaultBooleanInput('SHOW_LANGUAGES_FROM_ENGLISH', false),
     showStreakTimezone: defaultBooleanInput('SHOW_STREAK_TIMEZONE', false),
   }
-};
+});

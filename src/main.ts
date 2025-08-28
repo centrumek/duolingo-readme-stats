@@ -1,6 +1,6 @@
 import { getUserDetails } from './api';
 import { StreakData, UserDetailsResponse } from './types';
-import { configuration } from './configuration';
+import { getConfiguration } from './configuration';
 import {
   commitFile,
   formatLanguagesTable,
@@ -11,6 +11,7 @@ import {
 
 (async () => {
   try {
+    const configuration = getConfiguration();
     const fileName = configuration.file.name;
     const fileContent = await buildContent();
     updateFile(fileName, fileContent);
@@ -27,7 +28,7 @@ import {
   }
 })();
 
-async function buildContent() {
+async function buildContent(configuration: ReturnType<typeof getConfiguration> = getConfiguration()): Promise<string[]> {
   const content: string[] = [];
 
   const userDetails: UserDetailsResponse = await getUserDetails(

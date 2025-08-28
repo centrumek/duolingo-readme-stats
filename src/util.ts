@@ -2,7 +2,7 @@ import { Course, XPGain } from './types';
 import { spawn } from 'node:child_process';
 import { setFailed } from '@actions/core';
 import fs from 'fs';
-import { configuration } from './configuration';
+import { getConfiguration } from './configuration';
 
 export const START_TOKEN = '<!--START_SECTION:duolingoStats-->';
 export const END_TOKEN = '<!--END_SECTION:duolingoStats-->';
@@ -83,8 +83,8 @@ export const courseFlags: { [key: string]: string } = {
 };
 
 export function getEmoji(title: string) {
-  const string = `<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/langs/${courseFlags[title]}" height="12">`;
-  return string;
+  if (!courseFlags[title]) return '';
+  return `<img src="https://raw.githubusercontent.com/centrumek/duolingo-readme-stats/main/assets/langs/${courseFlags[title]}" height="12">`;
 }
 
 export function updateFile(name: string, content: string[]) {
@@ -161,7 +161,7 @@ export const formatOverviewTable = (
     'Diamond'
   ];
   const tableHeader = `| Username | Day Streak${
-    configuration.flags.showStreakTimezone === true && streakTimeZone
+    getConfiguration().flags.showStreakTimezone === true && streakTimeZone
       ? ' (' +
         new Intl.DateTimeFormat('en-UK', {
           timeZone: streakTimeZone,
@@ -243,7 +243,7 @@ export const formatLanguagesTable = (courses: Course[]): string => {
           ' ' +
           course.title +
           (course.fromLanguage == 'en'
-            ? configuration.flags.showLanguagesFromEnglish
+            ? getConfiguration().flags.showLanguagesFromEnglish
               ? ` (from ${getEmoji('English')} English)`
               : ''
             : ` (from ${getEmoji(langsISO[course.fromLanguage])} ${

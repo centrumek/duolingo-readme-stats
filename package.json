@@ -5,6 +5,7 @@
   "scripts": {
     "build": "tsc",
     "start": "npm run build && node lib/main.js",
+    "test": "jest",
     "debug": "npm run build && node --env-file .env lib/main.js",
     "package": "npm run build && ncc build lib/main.js --source-map --license licenses.txt"
   },
